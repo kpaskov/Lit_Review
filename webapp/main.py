@@ -16,7 +16,7 @@ from queries.misc import get_reftemps, get_recent_history, \
     find_genes_in_abstract
 from queries.move_ref import move_reftemp_to_refbad, MoveRefException
 from webapp.config import SECRET_KEY, HOST, PORT
-from webapp.forms import LoginForm, ManyReferenceForms
+from webapp.forms import LoginForm
 from webapp.login_handler import confirm_login_lit_review_user, \
     logout_lit_review_user, login_lit_review_user, setup_app, LoginException, \
     LogoutException, check_for_other_users
@@ -47,15 +47,12 @@ def index():
 @app.route("/reference", methods=['GET', 'POST'])
 @login_required
 def reference():
-    form = ManyReferenceForms(request.form)
     refs=[]
     num_of_refs=0
     try:
         check_for_other_users(current_user.name)
     
-        refs = model.execute(get_reftemps(), current_user.name) 
-        for ref in refs:
-            form.create_reference_form(ref.pubmed_id)  
+        refs = model.execute(get_reftemps(), current_user.name)  
         
         num_of_refs = len(refs) 
     
@@ -64,8 +61,7 @@ def reference():
         
     return render_template('literature_review.html',
                            ref_list=refs,
-                           ref_count=num_of_refs, 
-                           form=form)     
+                           ref_count=num_of_refs)     
     
 @app.route("/reference/remove_multiple/<pmids>", methods=['GET', 'POST'])
 @login_required
@@ -136,14 +132,15 @@ def link_ref(pmid):
     try:
         check_for_other_users(current_user.name)
         #if request.method == "POST":
-        tasks = check_form_validity_and_convert_to_tasks(request.form)
-        model.execute(link_paper(pmid, tasks), current_user.name, commit=True)
+        tasks = check_form_validity_and_convert_to_tasks(request.form) 
+        model.execute(link_paper(pmid, tasks), current_user.name, commit=True)   
             
         #Link successful
-        summary = model.execute(get_ref_summary(pmid), current_user.name) 
+        summary = model.execute(get_ref_summary(pmid), current_user.name)  
         response = "Reference for pmid = " + pmid + " has been added into the database and associated with the following data:<br>" + str(summary)
     
     except Exception as e:
+        print 'LINK ' + pmid + e.message  
         response = "Error: " + e.message;
 
     return response

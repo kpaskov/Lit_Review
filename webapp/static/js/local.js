@@ -34,6 +34,9 @@ function discard_paper(pmid) {
 
 function link_paper(pmid) {
 	var url = "/reference/link/" + pmid;
+	var form = $("#"+pmid + "_form");
+	
+	
 	$.post(url, $("#"+pmid + "_form").serialize(), function(data) {
 		input = "Error:"
 		if(data.substring(0, input.length) === input) {
@@ -82,7 +85,7 @@ function discard_checked_pmids() {
   	}
 	else {
   		document.getElementById("validation_error").innerHTML = "You haven't selected any references.";
-  		document.getElementById("validation_error").style.display = 'block';
+  		document.getElementById("validation_error").style.display = 'block'; 
   }
 }
 

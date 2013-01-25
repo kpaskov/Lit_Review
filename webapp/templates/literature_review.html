@@ -26,9 +26,7 @@
 
           {% set pmid = row.pubmed_id %}
           
-       
-	      {% set sub_form = form.get_reference_form(pmid) %}
-
+        
           <div id='{{pmid}}'>   <!-- start pubmed section -->
           	
      
@@ -70,81 +68,78 @@
           
 	     </div>
 	  <form id={{pmid~"_form"}}><ul>
-	     {{sub_form.high_priority_cb(id=pmid~'_high_priority_cb', onclick="show_hide_comment('"~pmid~"_high_priority')")}} {{sub_form.high_priority_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>
-		<ul><div id={{pmid~"_high_priority_block"}} style="display:none;">
-	     	{{sub_form.high_priority_comment.label(style="float:left")}}
-	     	{{sub_form.high_priority_comment(id=pmid~'_high_priority_comment', style="width:100%", rows="1")}}
-	     </div></ul>
+	  	<input id={{pmid~'_high_priority_cb'}} name={{pmid~'_high_priority_cb'}} onclick="show_hide_comment('{{pmid~'_high_priority'}}')" type="checkbox"> High Priority <span class="muted">(Primary Literature)</span> <br>
+		<ul><div id={{pmid~'_high_priority_block'}} style="display:none;">
+			<label style="float:left">Comment:</label>
+			<textarea id={{pmid~'_high_priority_comment'}} name={{pmid~'_high_priority_comment'}} style="width:100%" rows="1"></textarea><br>
+	    </div></ul>
 	     
-	     {{sub_form.delay_cb(id=pmid~'_delay_cb', onclick="show_hide_comment('"~pmid~"_delay')")}} {{sub_form.delay_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>     	
-		 <ul><div id={{pmid~"_delay_block"}} style="display:none;">
-	     	{{sub_form.delay_comment.label(style="float:left")}}
-	     	{{sub_form.delay_comment(id=pmid~'_delay_comment', style="width:100%", rows="1")}}
-	     </div></ul>
-
-	     {{sub_form.htp_cb(id=pmid~'_htp_cb', onclick="show_hide_comment('"~pmid~"_htp')")}} {{sub_form.htp_cb.label.text }} <span class="muted">(Omics)</span> <br>     	
-		 <ul><div id={{pmid~"_htp_block"}} style="display:none;">
-	     	{{sub_form.htp_comment.label(style="float:left")}}
-	     	{{sub_form.htp_comment(id=pmid~'_htp_comment', style="width:50%", rows="1")}}
-	     </div></ul>
-
-	     {{sub_form.other_cb(id=pmid~'_other_cb', onclick="show_hide_comment('"~pmid~"_other')")}} {{sub_form.other_cb.label.text }} <span class="muted">(Omics)</span> <br>
-		 <ul><div id={{pmid~"_other_block"}} style="display:none;">
-	     	{{sub_form.other_comment.label(style="float:left")}}
-	     	{{sub_form.other_comment(id=pmid~'_other_comment', style="width:50%", rows="1")}}
-	     </div></ul>
-	     
-	     {{sub_form.go_cb(id=pmid~'_go_cb', onclick="show_hide_comment('"~pmid~"_go')")}} {{sub_form.go_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>
-	     <ul><div id={{pmid~"_go_block"}} style="display:none;">
-	     	<span style="float:left; color:red">*</span>
-	     	{{sub_form.go_genes.label(style="float:left")}}
-	     	{{sub_form.go_genes(id=pmid~'_go_genes', style="width:40%; float:left", rows="1")}}
-	     	{{sub_form.go_comment.label(style="float:left")}}
-	     	{{sub_form.go_comment(id=pmid~'_go_comment', style="width:40%", rows="1")}}
-	     </div></ul>
-	     
-	     {{sub_form.phenotype_cb(id=pmid~'_phenotype_cb', onclick="show_hide_comment('"~pmid~"_phenotype')")}} {{sub_form.phenotype_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>
-	     <ul><div id={{pmid~"_phenotype_block"}} style="display:none;">
-	     	<span style="float:left; color:red">*</span>
-	     	{{sub_form.phenotype_genes.label(style="float:left")}}
-	     	{{sub_form.phenotype_genes(id=pmid~'_phenotype_genes', style="width:40%; float:left", rows="1")}}
-	     	{{sub_form.phenotype_comment.label(style="float:left")}}
-	     	{{sub_form.phenotype_comment(id=pmid~'_phenotype_comment', style="width:40%", rows="1")}}
-	     </div></ul>
-	     
-	     {{sub_form.headline_cb(id=pmid~'_headline_cb', onclick="show_hide_comment('"~pmid~"_headline')")}} {{sub_form.headline_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>
-	     <ul><div id={{pmid~"_headline_block"}} style="display:none;">
-	     	<span style="float:left; color:red">*</span>
-	     	{{sub_form.headline_genes.label(style="float:left")}}
-	     	{{sub_form.headline_genes(id=pmid~'_headline_genes', style="width:40%; float:left", rows="1")}}
-	     	{{sub_form.headline_comment.label(style="float:left")}}
-	     	{{sub_form.headline_comment(id=pmid~'_headline_comment', style="width:40%", rows="1")}}
-	     </div></ul>
-	     
-	     {{sub_form.primary_cb(id=pmid~'_primary_cb', onclick="show_hide_comment('"~pmid~"_primary')")}} {{sub_form.primary_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>
-	     <ul><div id={{pmid~"_primary_block"}} style="display:none;">
-	     	<span style="float:left; color:red">*</span>
-	     	{{sub_form.primary_genes.label(style="float:left")}}
-	     	{{sub_form.primary_genes(id=pmid~'_primary_genes', style="width:40%; float:left", rows="1")}}
-	     	{{sub_form.primary_comment.label(style="float:left")}}
-	     	{{sub_form.primary_comment(id=pmid~'_primary_comment', style="width:40%", rows="1")}}
-	     </div></ul>
-	     
-	     {{sub_form.review_cb(id=pmid~'_review_cb', onclick="show_hide_comment('"~pmid~"_review')")}} {{sub_form.review_cb.label.text }} <span class="muted">(Reviews)</span> <br>
-	     <ul><div id={{pmid~"_review_block"}} style="display:none;">
-	     	{{sub_form.review_genes.label(style="float:left")}}
-	     	{{sub_form.review_genes(id=pmid~'_review_genes', style="width:40%; float:left", rows="1")}}
-	     	{{sub_form.review_comment.label(style="float:left")}}
-	     	{{sub_form.review_comment(id=pmid~'_review_comment', style="width:40%", rows="1")}}
-	     </div></ul>
-	     
-	     {{sub_form.add_to_db_cb(id=pmid~'_add_to_db_cb', onclick="show_hide_comment('"~pmid~"_add_to_db')")}} {{sub_form.add_to_db_cb.label.text }} <span class="muted">(Additional Literature)</span> <br>
-	     <ul><div id={{pmid~"_add_to_db_block"}} style="display:none;">
-	     	{{sub_form.add_to_db_genes.label(style="float:left")}}
-	     	{{sub_form.add_to_db_genes(id=pmid~'_add_to_db_genes', style="width:40%; float:left", rows="1")}}
-	     	{{sub_form.add_to_db_comment.label(style="float:left")}}
-	     	{{sub_form.add_to_db_comment(id=pmid~'_add_to_db_comment', style="width:40%", rows="1")}}
-	     </div></ul>
+	    <input id={{pmid~'_delay_cb'}} name={{pmid~'_delay_cb'}} onclick="show_hide_comment('{{pmid~'_delay'}}')" type="checkbox"> Delay <span class="muted">(Primary Literature)</span> <br>
+		<ul><div id={{pmid~'_delay_block'}} style="display:none;">
+			<label style="float:left">Comment:</label>
+			<textarea id={{pmid~'_delay_comment'}} name={{pmid~'_delay_comment'}} style="width:100%" rows="1"></textarea><br>
+	    </div></ul>
+	    
+	    <input id={{pmid~'_htp_cb'}} name={{pmid~'_htp_cb'}} onclick="show_hide_comment('{{pmid~'_htp'}}')" type="checkbox"> HTP Phenotype Data <span class="muted">(Omics)</span> <br>
+		<ul><div id={{pmid~'_htp_block'}} style="display:none;">
+			<label style="float:left">Comment:</label>
+			<textarea id={{pmid~'_htp_comment'}} name={{pmid~'_htp_comment'}} style="width:100%" rows="1"></textarea><br>
+	    </div></ul>
+	    
+	    <input id={{pmid~'_other_cb'}} name={{pmid~'_other_cb'}} onclick="show_hide_comment('{{pmid~'_other'}}')" type="checkbox"> Other HTP Data <span class="muted">(Omics)</span> <br>
+		<ul><div id={{pmid~'_other_block'}} style="display:none;">
+			<label style="float:left">Comment:</label>
+			<textarea id={{pmid~'_other_comment'}} name={{pmid~'_other_comment'}} style="width:100%" rows="1"></textarea><br>
+	    </div></ul>
+	    
+	    <input id={{pmid~'_go_cb'}} name={{pmid~'_go_cb'}} onclick="show_hide_comment('{{pmid~'_go'}}')" type="checkbox"> GO Information <span class="muted">(Primary Literature)</span> <br>
+		<ul><div id={{pmid~'_go_block'}} style="display:none;">
+			<label style="float:left">Genes:</label>
+			<textarea id={{pmid~'_go_genes'}} name={{pmid~'_go_genes'}} style="float:left; width:40%" rows="1"></textarea>
+			<label style="float:left">Comment:</label>
+			<textarea id={{pmid~'_go_comment'}} name={{pmid~'_go_comment'}} style="width:40%" rows="1"></textarea><br>
+	    </div></ul>
+	    
+	    <input id={{pmid~'_phenotype_cb'}} name={{pmid~'_phenotype_cb'}} onclick="show_hide_comment('{{pmid~'_phenotype'}}')" type="checkbox"> Classical Phenotype Information <span class="muted">(Primary Literature)</span> <br>
+		<ul><div id={{pmid~'_phenotype_block'}} style="display:none;">
+			<label style="float:left">Genes:</label>
+			<textarea id={{pmid~'_phenotype_genes'}} name={{pmid~'_phenotype_genes'}} style="float:left; width:40%" rows="1"></textarea>
+			<label style="float:left">Comment:</label>
+			<textarea id={{pmid~'_phenotype_comment'}} name={{pmid~'_phenotype_comment'}} style="width:40%" rows="1"></textarea><br>
+	    </div></ul>
+	    
+	    <input id={{pmid~'_headline_cb'}} name={{pmid~'_headline_cb'}} onclick="show_hide_comment('{{pmid~'_headline'}}')" type="checkbox"> Headline Information <span class="muted">(Primary Literature)</span> <br>
+		<ul><div id={{pmid~'_headline_block'}} style="display:none;">
+			<label style="float:left">Genes:</label>
+			<textarea id={{pmid~'_headline_genes'}} name={{pmid~'_headline_genes'}} style="float:left; width:40%" rows="1"></textarea>
+			<label style="float:left">Comment:</label>
+			<textarea id={{pmid~'_headline_comment'}} name={{pmid~'_headline_comment'}} style="width:40%" rows="1"></textarea><br>
+	    </div></ul>
+	    
+	    <input id={{pmid~'_primary_cb'}} name={{pmid~'_primary_cb'}} onclick="show_hide_comment('{{pmid~'_primary'}}')" type="checkbox"> Other Primary Information <span class="muted">(Primary Literature)</span> <br>
+		<ul><div id={{pmid~'_primary_block'}} style="display:none;">
+			<label style="float:left">Genes:</label>
+			<textarea id={{pmid~'_primary_genes'}} name={{pmid~'_primary_genes'}} style="float:left; width:40%" rows="1"></textarea>
+			<label style="float:left">Comment:</label>
+			<textarea id={{pmid~'_primary_comment'}} name={{pmid~'_primary_comment'}} style="width:40%" rows="1"></textarea><br>
+	    </div></ul>
+	    
+	    <input id={{pmid~'_review_cb'}} name={{pmid~'_review_cb'}} onclick="show_hide_comment('{{pmid~'_review'}}')" type="checkbox"> Review <span class="muted">(Reviews)</span> <br>
+		<ul><div id={{pmid~'_review_block'}} style="display:none;">
+			<label style="float:left">Genes:</label>
+			<textarea id={{pmid~'_review_genes'}} name={{pmid~'_review_genes'}} style="float:left; width:40%" rows="1"></textarea>
+			<label style="float:left">Comment:</label>
+			<textarea id={{pmid~'_review_comment'}} name={{pmid~'_review_comment'}} style="width:40%" rows="1"></textarea><br>
+	    </div></ul>
+	    
+	    <input id={{pmid~'_add_to_db_cb'}} name={{pmid~'_add_to_db_cb'}} onclick="show_hide_comment('{{pmid~'_add_to_db'}}')" type="checkbox"> Add to Database <span class="muted">(Additional Literature)</span> <br>
+		<ul><div id={{pmid~'_add_to_db_block'}} style="display:none;">
+			<label style="float:left">Genes:</label>
+			<textarea id={{pmid~'_add_to_db_genes'}} name={{pmid~'_add_to_db_genes'}} style="float:left; width:40%" rows="1"></textarea>
+			<label style="float:left">Comment:</label>
+			<textarea id={{pmid~'_add_to_db_comment'}} name={{pmid~'_add_to_db_comment'}} style="width:40%" rows="1"></textarea><br>
+	    </div></ul>
+	
    
 	  </ul>
 	</form>
@@ -155,11 +150,6 @@
 	  </ul></div>  <!-- end of a pubmed section -->
 
 	  <hr>
-
-        
-
-
-
 
 
       {% endfor %}

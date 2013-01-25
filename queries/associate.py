@@ -166,15 +166,13 @@ class ReviewCheckedWithoutGenesException(FormNotValidException):
 def check_form_validity_and_convert_to_tasks(data):
     tasks = []
     not_repeated = set()
-    
-    for key in data.keys():
-        print key 
+    for key in data.keys(): 
         if key.endswith('_cb'):
             task_key = key[:-3]
             genes_key = task_key + '_genes'
             comment_key = task_key + '_comment'
             
-            task_type = get_task_type_by_key(task_key[18:]) 
+            task_type = get_task_type_by_key(task_key[task_key.find('_')+1:]) 
 
             if genes_key in data:
                 genes = data[genes_key]
@@ -189,11 +187,11 @@ def check_form_validity_and_convert_to_tasks(data):
                     intersection = not_repeated & set(gene_names)
                     if len(intersection) > 0:
                         raise GeneNameUsedMultipleTimesException(intersection) 
-                    not_repeated.update(gene_names)
+                    not_repeated.update(gene_names) 
             else:
                 gene_names = [] 
                                 
-            task = Task(task_type, gene_names, data[comment_key]) 
+            task = Task(task_type, gene_names, data[comment_key])   
             tasks.append(task)
             
     #Must have at least one task.

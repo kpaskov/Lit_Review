@@ -10,8 +10,7 @@ from model_old_schema import Base
 from model_old_schema.config import DBTYPE, DBHOST, DBNAME
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm.session import sessionmaker
-import sys
-import traceback
+
 
 # imports of model classes from model.feature, model.taxonomy, etc are done as needed, since these imports are
 # not available until AFTER the metadata is bound to the engine.  
@@ -59,8 +58,8 @@ class Model(object):
                 session.commit()
             return response
         except Exception as e:
+            print "MODEL" + e.message 
             session.rollback()
-            traceback.print_exc(file=sys.stdout)
             raise e
         finally:
             session.close()
