@@ -129,7 +129,6 @@ def discard_ref(pmid):
 @app.route("/reference/link/<pmid>", methods=['GET', 'POST'])
 @login_required 
 def link_ref(pmid):
-    print "LINK" + pmid 
     response = ""
     try:
         check_for_other_users(current_user.name)

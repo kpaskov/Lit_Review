@@ -109,7 +109,6 @@ function extract_genes(pmid) {
 
 
 function validate(pmid) {
-	document.getElementById(pmid + "_validation_error").style.display = 'block';
 	errors = "";
 	
 	//Certain tasks must have genes.
