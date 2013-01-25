@@ -18,7 +18,8 @@ class Task():
         elif task_type == TaskType.HEADLINE_INFORMATION: self.ref_curation_name = 'Headline information'; self.topic = 'Primary Literature'
         elif task_type == TaskType.HIGH_PRIORITY: self.ref_curation_name = 'High Priority'; self.topic = 'Primary Literature'
         elif task_type == TaskType.OTHER_HTP_DATA: self.ref_curation_name = 'Non-phenotype HTP'; self.topic = 'Omics'
-        
+        elif task_type == TaskType.OTHER_PRIMARY_INFORMATION: self.ref_curation_name = None; self.topic = 'Primary Literature'
+
         self.type = task_type
         self.gene_names = gene_names
         self.comment = comment
@@ -33,6 +34,7 @@ class TaskType:
     HEADLINE_INFORMATION=6
     REVIEWS=7
     ADD_TO_DATABASE=8
+    OTHER_PRIMARY_INFORMATION=9
     
 def get_task_type_by_key(task_key):
         task_type = {'high_priority': TaskType.HIGH_PRIORITY,
@@ -43,12 +45,13 @@ def get_task_type_by_key(task_key):
                          'phenotype': TaskType.CLASSICAL_PHENOTYPE_INFORMATION,
                          'headline': TaskType.HEADLINE_INFORMATION,
                          'review': TaskType.REVIEWS,
-                         'add_to_db': TaskType.ADD_TO_DATABASE
+                         'add_to_db': TaskType.ADD_TO_DATABASE,
+                         'primary': TaskType.OTHER_PRIMARY_INFORMATION
                          }[task_key]
         return task_type
     
 def task_type_is_gene_specific(task_type):
-    return task_type == TaskType.GO_INFORMATION or task_type == TaskType.CLASSICAL_PHENOTYPE_INFORMATION or task_type == TaskType.HEADLINE_INFORMATION
+    return task_type == TaskType.GO_INFORMATION or task_type == TaskType.CLASSICAL_PHENOTYPE_INFORMATION or task_type == TaskType.HEADLINE_INFORMATION or task_type == TaskType.OTHER_PRIMARY_INFORMATION
     
 def associate(pubmed_id, name_to_feature, tasks, session=None):
     """
@@ -154,7 +157,7 @@ class GeneNameUsedMultipleTimesException(FormNotValidException):
 
 class NoTasksException(FormNotValidException):
     def __init__(self):
-        super(FormNotValidException, self).__init__("You have to check something before press the 'Link...' button")
+        super(FormNotValidException, self).__init__("From server You have to check something before press the 'Link...' button")
         
 class ReviewCheckedWithoutGenesException(FormNotValidException):
     def __init__(self):

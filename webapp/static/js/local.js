@@ -16,6 +16,36 @@ function show_hide_comment(id) {
 	}
 }
 
+function discard_paper(pmid) {
+
+	var url = "/reference/delete/" + pmid;
+	$.post(url, function(data) {
+		input = "Error:"
+		if(data.substring(0, input.length) === input) {
+			document.getElementById(pmid + "_validation_error").innerHTML = data
+			document.getElementById(pmid + "_validation_error").style.display = 'block';
+		}
+		else {
+			$("#" + pmid).empty().append("<div class='alert alert-success'><h4>Success!</h4>" + data + "</div>");
+		}
+	});
+
+}
+
+function link_paper(pmid) {
+	var url = "/reference/link/" + pmid;
+	$.post(url, $("#"+pmid + "_form").serialize(), function(data) {
+		input = "Error:"
+		if(data.substring(0, input.length) === input) {
+			document.getElementById(pmid + "_validation_error").innerHTML = data
+			document.getElementById(pmid + "_validation_error").style.display = 'block';		
+		}
+		else {
+			$("#" + pmid).empty().append("<div class='alert alert-success'><h4>Success!</h4>" + data + "</div>");
+		}
+	});
+}
+
 function show_hide_pmid(id) {
 	checkbox = document.getElementById(id + '_cb')
 	form = document.getElementById(id + '_whole_form')
@@ -31,7 +61,7 @@ function show_hide_pmid(id) {
 	}
 }
 
-function get_checked_pmids() {
+function discard_checked_pmids() {
 	
 	var checkboxes = document.getElementsByName('whole_ref_cb');
 	var checkboxesChecked = [];
@@ -47,25 +77,18 @@ function get_checked_pmids() {
   		returnStr = '';
   		//concatenate pubmed_ids
   		for (var i=0; i<checkboxesChecked.length; i++) {
-     		returnStr = returnStr + checkboxesChecked[i].value + "_";
+  			discard_paper(checkboxesChecked[i].value)
   		}
-  		
-  		document.getElementById('del_multiple').action = '/reference/remove_multiple/' + returnStr;
-		return true;
   	}
 	else {
   		document.getElementById("validation_error").innerHTML = "You haven't selected any references.";
   		document.getElementById("validation_error").style.display = 'block';
-		return false;
   }
 }
 
 function extract_genes(pmid) {  	
 	$.ajax( {
 		url: "/reference/extract_genes/" + pmid,
-		data: { 
-			zipcode: 97201 
-		},
 		success: function( data ) {
 			$( "#" + pmid + "_genes_area").html(data);
 			
@@ -81,12 +104,13 @@ function extract_genes(pmid) {
 	});
 }
 
+
 function validate(pmid) {
 	errors = "";
 	
 	//Certain tasks must have genes.
-	var mustHaveGenes = ["go", "phenotype", "headline"];
-	var mustHaveGenesFull = ["GO information", "Classical phenotype information", "Headline information"];
+	var mustHaveGenes = ["go", "phenotype", "headline", "primary"];
+	var mustHaveGenesFull = ["GO information", "Classical phenotype information", "Headline information", "Other Primary Information"];
 	for (var i = 0; i < mustHaveGenes.length; i++) {
 		var key = "_" + mustHaveGenes[i];
 		if (document.getElementById(pmid + key + '_cb').checked && document.getElementById(pmid + key + "_genes").value == "") {
@@ -131,13 +155,13 @@ function validate(pmid) {
 		}
 	}
 
-	document.getElementById("validation_error").innerHTML = errors
+	document.getElementById(pmid + "_validation_error").innerHTML = errors
 	if (errors == "") {
-		document.getElementById("validation_error").style.display = 'none';
-		return true;
+		document.getElementById(pmid + "_validation_error").style.display = 'none';
+		link_paper(pmid);
 	}
 	else {
-		document.getElementById("validation_error").style.display = 'block';
+		document.getElementById(pmid + "_validation_error").style.display = 'block';
 		return false;
 	}
 }
@@ -215,6 +239,24 @@ function doHighlight(bodyText, searchTerm, highlightStartTag, highlightEndTag) {
   return newText;
 }
 
+function simpleHighlight(bodyText, searchTerm, highlightStartTag, highlightEndTag) {
+	  // the highlightStartTag and highlightEndTag parameters are optional
+  if ((!highlightStartTag) || (!highlightEndTag)) {
+    highlightStartTag = "<font style='color:blue; background-color:yellow;'>";
+    highlightEndTag = "</font>";
+  }
+  
+	re = new RegExp(searchTerm, "gi");
+
+	func = function(match) {
+        return [highlightStartTag, match, highlightEndTag].join("");
+    };
+
+	bodyText = bodyText.replace(re, func);
+
+	return bodyText;
+}
+
 
 /*
  * This is sort of a wrapper function to the doHighlight function.
@@ -241,12 +283,12 @@ function highlightSearchTerms(searchText, highlightableArea, treatAsPhrase, warn
    	 	}
     	return false;
   	}
-  	highlightableArea=document.body
+  	highlightableArea=document.body;
   }
   
   var bodyText = highlightableArea.innerHTML;
   for (var i = 0; i < searchArray.length; i++) {
-    bodyText = doHighlight(bodyText, searchArray[i], highlightStartTag, highlightEndTag);
+    bodyText = simpleHighlight(bodyText, searchArray[i], highlightStartTag, highlightEndTag);
   }
   
   highlightableArea.innerHTML = bodyText;

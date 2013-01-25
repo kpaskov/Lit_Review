@@ -113,38 +113,40 @@ def extract_genes(pmid):
 @app.route("/reference/delete/<pmid>", methods=['GET', 'POST'])
 @login_required
 def discard_ref(pmid):
+    response = ""
     try:
         check_for_other_users(current_user.name)
-        if request.method == "POST":
-            moved = model.execute(move_reftemp_to_refbad(pmid), current_user.name, commit=True)
-            if not moved:
-                raise MoveRefException('An error occurred when deleting the reference for pmid=" + pmid + " from the database.')
+        #if request.method == "POST":
+        moved = model.execute(move_reftemp_to_refbad(pmid), current_user.name, commit=True)
+        if not moved:
+            raise MoveRefException('An error occurred when deleting the reference for pmid=" + pmid + " from the database.')
             
-            #Reference deleted
-            flash("Reference for pmid=" + pmid + " has been removed from the database.", 'success')
+        #Reference deleted
+        response = "Reference for pmid=" + pmid + " has been removed from the database."
     
     except Exception as e:
-        flash(e.message, 'error')
-        
-    return redirect(request.args.get("next") or url_for("reference")) 
+        response = "Error: " + e.message
+
+    return response
 
 @app.route("/reference/link/<pmid>", methods=['GET', 'POST'])
 @login_required 
 def link_ref(pmid):
+    response = ""
     try:
         check_for_other_users(current_user.name)
-        if request.method == "POST":
-            tasks = check_form_validity_and_convert_to_tasks(request.form)
-            model.execute(link_paper(pmid, tasks), current_user.name, commit=True)
+        #if request.method == "POST":
+        tasks = check_form_validity_and_convert_to_tasks(request.form)
+        model.execute(link_paper(pmid, tasks), current_user.name, commit=True)
             
-            #Link successful
-            summary = model.execute(get_ref_summary(pmid), current_user.name)
-            flash("Reference for pmid = " + pmid + " has been added into the database and associated with the following data:<br>" + str(summary), 'success')
+        #Link successful
+        summary = model.execute(get_ref_summary(pmid), current_user.name) 
+        response = "Reference for pmid = " + pmid + " has been added into the database and associated with the following data:<br>" + str(summary)
     
     except Exception as e:
-        flash(e.message, 'error')
+        response = "Error: " + e.message;
 
-    return redirect(request.args.get("next") or url_for("reference"))
+    return response
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

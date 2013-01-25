@@ -4,27 +4,25 @@
 {% extends "layout.html" %}
 {% block body %}
 <html lang="en">
-  <body onload="highlightSearchTerms('yeast cerevisiae');bold_citation({{ ref_count}});">
+  <body onload="bold_citation({{ ref_count}});">
   	
 
 
     <div class="container">
 	
       <p><p><h1>There are {{ ref_count }} new references to review</h1>
-      <h2>(for testing, we only show the top 10 papers)</h2>
       <p>
       	
-    <form id="del_multiple" onsubmit="return get_checked_pmids()" action="/reference/remove_multiple" method="post">
-		<input class="btn" type="submit" value="Discard Selected Papers"\>
-	</form>
+         <input class="btn" type = "submit" onclick="discard_checked_pmids()" value="Discard Selected Papers"\>
+
       <hr>
 
       <input type="hidden" id="user" name="variable" value="{{ current_user.name.upper() }}">	  
 
       {% for row in ref_list %}
       
-      
-        {% if loop.index <= 10 %}   <!-- just for testing purpose -->
+
+        
 
           {% set pmid = row.pubmed_id %}
           
@@ -32,6 +30,9 @@
 	      {% set sub_form = form.get_reference_form(pmid) %}
 
           <div id='{{pmid}}'>   <!-- start pubmed section -->
+          	
+     
+
        
           <input type="checkbox" value = {{pmid}} name="whole_ref_cb" id={{pmid~"_cb"}} onclick="show_hide_pmid({{pmid}})">
           <span id='citation{{ loop.index }}'> {{ row.citation }}</span> <br>
@@ -49,118 +50,150 @@
 	  <ul id='abstract{{ loop.index }}'>
 	      <li><b>Abstract:</b><br>
 	      <ul><div id={{pmid~"_abstract"}}>{{ row.abstract }}</div></ul>
-              </li>
+          </li>
 	  </ul>
+	  
 	  	<div id={{pmid~"_whole_form"}}>
 	  	
 	  	
 
-	  <form name="del_ref" action="/reference/delete/{{pmid}}" method="post">
-		<input class="btn" type="submit" value="Discard this paper"\>
-	  </form>
+		<input class="btn" type = "submit" onclick="discard_paper({{pmid}})" value="Discard this paper"\>
 	  
 	  <div id={{pmid~"_abstract_genes"}}> 
 	     	Genes: <button class="btn btn-mini" onclick="extract_genes({{pmid}})">Auto-extract from abstract</button> 
 	     	<textarea id={{pmid~"_genes_area"}} rows="1" style="width:100%"></textarea>
 	     	
+	     	
+	     <!-- Prints client-side form validation errors. -->
+          <div id={{pmid~"_validation_error"}} class="alert alert-error" style="display:none;"></div>
+          
+          
 	     </div>
-
-	  <form id={{pmid~"_form"}} type = "submit" onsubmit="return validate({{pmid}})" action="/reference/link/{{pmid}}" method="post" ><ul>
-	     {{sub_form.high_priority_cb(id=pmid~'_high_priority_cb', onclick="show_hide_comment('"~pmid~"_high_priority')")}} {{sub_form.high_priority_cb.label.text }} <br>
-	     <ul><div id={{pmid~"_high_priority_block"}} style="display:none;">
-	     	{{sub_form.high_priority_comment.label}}
-	     	{{sub_form.high_priority_comment(id=pmid~'_high_priority_comment', style="width:100%", rows="3")}}
+	  <form id={{pmid~"_form"}}><ul>
+	     {{sub_form.high_priority_cb(id=pmid~'_high_priority_cb', onclick="show_hide_comment('"~pmid~"_high_priority')")}} {{sub_form.high_priority_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>
+		<ul><div id={{pmid~"_high_priority_block"}} style="display:none;">
+	     	{{sub_form.high_priority_comment.label(style="float:left")}}
+	     	{{sub_form.high_priority_comment(id=pmid~'_high_priority_comment', style="width:100%", rows="1")}}
 	     </div></ul>
 	     
-	     {{sub_form.delay_cb(id=pmid~'_delay_cb', onclick="show_hide_comment('"~pmid~"_delay')")}} {{sub_form.delay_cb.label.text }} <br>     	
+	     {{sub_form.delay_cb(id=pmid~'_delay_cb', onclick="show_hide_comment('"~pmid~"_delay')")}} {{sub_form.delay_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>     	
 		 <ul><div id={{pmid~"_delay_block"}} style="display:none;">
-	     	{{sub_form.delay_comment.label}}
-	     	{{sub_form.delay_comment(id=pmid~'_delay_comment', style="width:100%", rows="3")}}
+	     	{{sub_form.delay_comment.label(style="float:left")}}
+	     	{{sub_form.delay_comment(id=pmid~'_delay_comment', style="width:100%", rows="1")}}
 	     </div></ul>
 
-	     {{sub_form.htp_cb(id=pmid~'_htp_cb', onclick="show_hide_comment('"~pmid~"_htp')")}} {{sub_form.htp_cb.label.text }} <br>     	
+	     {{sub_form.htp_cb(id=pmid~'_htp_cb', onclick="show_hide_comment('"~pmid~"_htp')")}} {{sub_form.htp_cb.label.text }} <span class="muted">(Omics)</span> <br>     	
 		 <ul><div id={{pmid~"_htp_block"}} style="display:none;">
-	     	{{sub_form.htp_comment.label}}
-	     	{{sub_form.htp_comment(id=pmid~'_htp_comment', style="width:100%", rows="3")}}
+	     	{{sub_form.htp_comment.label(style="float:left")}}
+	     	{{sub_form.htp_comment(id=pmid~'_htp_comment', style="width:50%", rows="1")}}
 	     </div></ul>
 
-	     {{sub_form.other_cb(id=pmid~'_other_cb', onclick="show_hide_comment('"~pmid~"_other')")}} {{sub_form.other_cb.label.text }} <br>
+	     {{sub_form.other_cb(id=pmid~'_other_cb', onclick="show_hide_comment('"~pmid~"_other')")}} {{sub_form.other_cb.label.text }} <span class="muted">(Omics)</span> <br>
 		 <ul><div id={{pmid~"_other_block"}} style="display:none;">
-	     	{{sub_form.other_comment.label}}
-	     	{{sub_form.other_comment(id=pmid~'_other_comment', style="width:100%", rows="3")}}
+	     	{{sub_form.other_comment.label(style="float:left")}}
+	     	{{sub_form.other_comment(id=pmid~'_other_comment', style="width:50%", rows="1")}}
 	     </div></ul>
 	     
-	     {{sub_form.go_cb(id=pmid~'_go_cb', onclick="show_hide_comment('"~pmid~"_go')")}} {{sub_form.go_cb.label.text }} <br>
+	     {{sub_form.go_cb(id=pmid~'_go_cb', onclick="show_hide_comment('"~pmid~"_go')")}} {{sub_form.go_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>
 	     <ul><div id={{pmid~"_go_block"}} style="display:none;">
-	     	{{sub_form.go_genes.label}}
-	     	{{sub_form.go_genes(id=pmid~'_go_genes', style="width:100%", rows="1")}}
-	     	{{sub_form.go_comment.label}}
-	     	{{sub_form.go_comment(id=pmid~'_go_comment', style="width:100%", rows="3")}}
+	     	<span style="float:left; color:red">*</span>
+	     	{{sub_form.go_genes.label(style="float:left")}}
+	     	{{sub_form.go_genes(id=pmid~'_go_genes', style="width:40%; float:left", rows="1")}}
+	     	{{sub_form.go_comment.label(style="float:left")}}
+	     	{{sub_form.go_comment(id=pmid~'_go_comment', style="width:40%", rows="1")}}
 	     </div></ul>
 	     
-	     {{sub_form.phenotype_cb(id=pmid~'_phenotype_cb', onclick="show_hide_comment('"~pmid~"_phenotype')")}} {{sub_form.phenotype_cb.label.text }} <br>
+	     {{sub_form.phenotype_cb(id=pmid~'_phenotype_cb', onclick="show_hide_comment('"~pmid~"_phenotype')")}} {{sub_form.phenotype_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>
 	     <ul><div id={{pmid~"_phenotype_block"}} style="display:none;">
-	     	{{sub_form.phenotype_genes.label}}
-	     	{{sub_form.phenotype_genes(id=pmid~'_phenotype_genes', style="width:100%", rows="1")}}
-	     	{{sub_form.phenotype_comment.label}}
-	     	{{sub_form.phenotype_comment(id=pmid~'_phenotype_comment', style="width:100%", rows="3")}}
+	     	<span style="float:left; color:red">*</span>
+	     	{{sub_form.phenotype_genes.label(style="float:left")}}
+	     	{{sub_form.phenotype_genes(id=pmid~'_phenotype_genes', style="width:40%; float:left", rows="1")}}
+	     	{{sub_form.phenotype_comment.label(style="float:left")}}
+	     	{{sub_form.phenotype_comment(id=pmid~'_phenotype_comment', style="width:40%", rows="1")}}
 	     </div></ul>
 	     
-	     {{sub_form.headline_cb(id=pmid~'_headline_cb', onclick="show_hide_comment('"~pmid~"_headline')")}} {{sub_form.headline_cb.label.text }} <br>
+	     {{sub_form.headline_cb(id=pmid~'_headline_cb', onclick="show_hide_comment('"~pmid~"_headline')")}} {{sub_form.headline_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>
 	     <ul><div id={{pmid~"_headline_block"}} style="display:none;">
-	     	{{sub_form.headline_genes.label}}
-	     	{{sub_form.headline_genes(id=pmid~'_headline_genes', style="width:100%", rows="1")}}
-	     	{{sub_form.headline_comment.label}}
-	     	{{sub_form.headline_comment(id=pmid~'_headline_comment', style="width:100%", rows="3")}}
+	     	<span style="float:left; color:red">*</span>
+	     	{{sub_form.headline_genes.label(style="float:left")}}
+	     	{{sub_form.headline_genes(id=pmid~'_headline_genes', style="width:40%; float:left", rows="1")}}
+	     	{{sub_form.headline_comment.label(style="float:left")}}
+	     	{{sub_form.headline_comment(id=pmid~'_headline_comment', style="width:40%", rows="1")}}
 	     </div></ul>
 	     
-	     {{sub_form.review_cb(id=pmid~'_review_cb', onclick="show_hide_comment('"~pmid~"_review')")}} {{sub_form.review_cb.label.text }} <br>
+	     {{sub_form.primary_cb(id=pmid~'_primary_cb', onclick="show_hide_comment('"~pmid~"_primary')")}} {{sub_form.primary_cb.label.text }} <span class="muted">(Primary Literature)</span> <br>
+	     <ul><div id={{pmid~"_primary_block"}} style="display:none;">
+	     	<span style="float:left; color:red">*</span>
+	     	{{sub_form.primary_genes.label(style="float:left")}}
+	     	{{sub_form.primary_genes(id=pmid~'_primary_genes', style="width:40%; float:left", rows="1")}}
+	     	{{sub_form.primary_comment.label(style="float:left")}}
+	     	{{sub_form.primary_comment(id=pmid~'_primary_comment', style="width:40%", rows="1")}}
+	     </div></ul>
+	     
+	     {{sub_form.review_cb(id=pmid~'_review_cb', onclick="show_hide_comment('"~pmid~"_review')")}} {{sub_form.review_cb.label.text }} <span class="muted">(Reviews)</span> <br>
 	     <ul><div id={{pmid~"_review_block"}} style="display:none;">
-	     	{{sub_form.review_genes.label}}
-	     	{{sub_form.review_genes(id=pmid~'_review_genes', style="width:100%", rows="1")}}
-	     	{{sub_form.review_comment.label}}
-	     	{{sub_form.review_comment(id=pmid~'_review_comment', style="width:100%", rows="3")}}
+	     	{{sub_form.review_genes.label(style="float:left")}}
+	     	{{sub_form.review_genes(id=pmid~'_review_genes', style="width:40%; float:left", rows="1")}}
+	     	{{sub_form.review_comment.label(style="float:left")}}
+	     	{{sub_form.review_comment(id=pmid~'_review_comment', style="width:40%", rows="1")}}
 	     </div></ul>
 	     
-	     {{sub_form.add_to_db_cb(id=pmid~'_add_to_db_cb', onclick="show_hide_comment('"~pmid~"_add_to_db')")}} {{sub_form.add_to_db_cb.label.text }} <br>
+	     {{sub_form.add_to_db_cb(id=pmid~'_add_to_db_cb', onclick="show_hide_comment('"~pmid~"_add_to_db')")}} {{sub_form.add_to_db_cb.label.text }} <span class="muted">(Additional Literature)</span> <br>
 	     <ul><div id={{pmid~"_add_to_db_block"}} style="display:none;">
-	     	{{sub_form.add_to_db_genes.label}}
-	     	{{sub_form.add_to_db_genes(id=pmid~'_add_to_db_genes', style="width:100%", rows="1")}}
-	     	{{sub_form.add_to_db_comment.label}}
-	     	{{sub_form.add_to_db_comment(id=pmid~'_add_to_db_comment', style="width:100%", rows="3")}}
+	     	{{sub_form.add_to_db_genes.label(style="float:left")}}
+	     	{{sub_form.add_to_db_genes(id=pmid~'_add_to_db_genes', style="width:40%; float:left", rows="1")}}
+	     	{{sub_form.add_to_db_comment.label(style="float:left")}}
+	     	{{sub_form.add_to_db_comment(id=pmid~'_add_to_db_comment', style="width:40%", rows="1")}}
 	     </div></ul>
-    
+   
 	  </ul>
-	  	{{sub_form.link(class="btn")}}
-
 	</form>
+	
+		<input class="btn" type = "submit" onclick="validate({{pmid}})" value="Link checked tags/topics/genes to this paper"\>
+
 	</div>
 	  </ul></div>  <!-- end of a pubmed section -->
 
 	  <hr>
 
+        
 
-	{% endif %}
-	
-	
+
+
+
 
       {% endfor %}
-     
+      
+      <input class="btn" type = "submit" onclick="discard_checked_pmids()" value="Discard Selected Papers"\>
+
+           
       
     </div> <!-- /container -->
 
     <script src="../static/js/local.js"></script> 
 
-    
     <script>
+	for (var i = 1; i <= {{ ref_count }}; i++) {
+	// id = 'abstract1', 'abstract2', ...
+		activateCollapsible('abstract'+i);
 
-         for (var i = 1; i <= {{ ref_count }}; i++) {
-	     // id = 'abstract1', 'abstract2', ...
-	     activateCollapsible('abstract'+i);
 	 }
+     
+     
+
        
    </script>
-
+   
+    {% for row in ref_list %}
+          {% set pmid = row.pubmed_id %}
+          <script>
+          	var abs_string = {{pmid}} + "_abstract";
+     		var element = document.getElementById(abs_string);
+	 		highlightSearchTerms('yeast cerevisiae', element);
+	 	</script>
+    {% endfor %}
+   
+          
   </body>
 </html>
 {% endblock body %}
