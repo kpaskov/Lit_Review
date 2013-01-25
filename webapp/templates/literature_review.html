@@ -68,13 +68,13 @@
           
 	     </div>
 	  <form id={{pmid~"_form"}}><ul>
-	  	<input id={{pmid~'_high_priority_cb'}} name={{pmid~'_high_priority_cb'}} onclick="show_hide_comment('{{pmid~'_high_priority'}}')" type="checkbox"> High Priority <span class="muted">(Primary Literature)</span> <br>
+	  	<input id={{pmid~'_high_priority_cb'}} name={{pmid~'_high_priority_cb'}} onclick="show_hide_comment('{{pmid~'_high_priority'}}')" type="checkbox"> High Priority
 		<ul><div id={{pmid~'_high_priority_block'}} style="display:none;">
 			<label style="float:left">Comment:</label>
 			<textarea id={{pmid~'_high_priority_comment'}} name={{pmid~'_high_priority_comment'}} style="width:100%" rows="1"></textarea><br>
 	    </div></ul>
 	     
-	    <input id={{pmid~'_delay_cb'}} name={{pmid~'_delay_cb'}} onclick="show_hide_comment('{{pmid~'_delay'}}')" type="checkbox"> Delay <span class="muted">(Primary Literature)</span> <br>
+	    <input id={{pmid~'_delay_cb'}} name={{pmid~'_delay_cb'}} onclick="show_hide_comment('{{pmid~'_delay'}}')" type="checkbox"> Delay
 		<ul><div id={{pmid~'_delay_block'}} style="display:none;">
 			<label style="float:left">Comment:</label>
 			<textarea id={{pmid~'_delay_comment'}} name={{pmid~'_delay_comment'}} style="width:100%" rows="1"></textarea><br>
@@ -94,6 +94,7 @@
 	    
 	    <input id={{pmid~'_go_cb'}} name={{pmid~'_go_cb'}} onclick="show_hide_comment('{{pmid~'_go'}}')" type="checkbox"> GO Information <span class="muted">(Primary Literature)</span> <br>
 		<ul><div id={{pmid~'_go_block'}} style="display:none;">
+			<span style="float:left; color:red">*</span>
 			<label style="float:left">Genes:</label>
 			<textarea id={{pmid~'_go_genes'}} name={{pmid~'_go_genes'}} style="float:left; width:40%" rows="1"></textarea>
 			<label style="float:left">Comment:</label>
@@ -102,6 +103,7 @@
 	    
 	    <input id={{pmid~'_phenotype_cb'}} name={{pmid~'_phenotype_cb'}} onclick="show_hide_comment('{{pmid~'_phenotype'}}')" type="checkbox"> Classical Phenotype Information <span class="muted">(Primary Literature)</span> <br>
 		<ul><div id={{pmid~'_phenotype_block'}} style="display:none;">
+			<span style="float:left; color:red">*</span>
 			<label style="float:left">Genes:</label>
 			<textarea id={{pmid~'_phenotype_genes'}} name={{pmid~'_phenotype_genes'}} style="float:left; width:40%" rows="1"></textarea>
 			<label style="float:left">Comment:</label>
@@ -110,6 +112,7 @@
 	    
 	    <input id={{pmid~'_headline_cb'}} name={{pmid~'_headline_cb'}} onclick="show_hide_comment('{{pmid~'_headline'}}')" type="checkbox"> Headline Information <span class="muted">(Primary Literature)</span> <br>
 		<ul><div id={{pmid~'_headline_block'}} style="display:none;">
+			<span style="float:left; color:red">*</span>
 			<label style="float:left">Genes:</label>
 			<textarea id={{pmid~'_headline_genes'}} name={{pmid~'_headline_genes'}} style="float:left; width:40%" rows="1"></textarea>
 			<label style="float:left">Comment:</label>
@@ -118,13 +121,14 @@
 	    
 	    <input id={{pmid~'_primary_cb'}} name={{pmid~'_primary_cb'}} onclick="show_hide_comment('{{pmid~'_primary'}}')" type="checkbox"> Other Primary Information <span class="muted">(Primary Literature)</span> <br>
 		<ul><div id={{pmid~'_primary_block'}} style="display:none;">
+			<span style="float:left; color:red">*</span>
 			<label style="float:left">Genes:</label>
 			<textarea id={{pmid~'_primary_genes'}} name={{pmid~'_primary_genes'}} style="float:left; width:40%" rows="1"></textarea>
 			<label style="float:left">Comment:</label>
 			<textarea id={{pmid~'_primary_comment'}} name={{pmid~'_primary_comment'}} style="width:40%" rows="1"></textarea><br>
 	    </div></ul>
 	    
-	    <input id={{pmid~'_review_cb'}} name={{pmid~'_review_cb'}} onclick="show_hide_comment('{{pmid~'_review'}}')" type="checkbox"> Review <span class="muted">(Reviews)</span> <br>
+	    <input id={{pmid~'_review_cb'}} name={{pmid~'_review_cb'}} onclick="show_hide_comment('{{pmid~'_primary'}}')" type="checkbox"> Review <span class="muted">(Reviews)</span> <br>
 		<ul><div id={{pmid~'_review_block'}} style="display:none;">
 			<label style="float:left">Genes:</label>
 			<textarea id={{pmid~'_review_genes'}} name={{pmid~'_review_genes'}} style="float:left; width:40%" rows="1"></textarea>

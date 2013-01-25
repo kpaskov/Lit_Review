@@ -22,7 +22,7 @@ class Task():
 
         self.type = task_type
         self.gene_names = gene_names
-        self.comment = comment
+        self.comment = comment 
         
 class TaskType:
     HIGH_PRIORITY=0
@@ -96,7 +96,7 @@ def associate(pubmed_id, name_to_feature, tasks, session=None):
                     reference.curations.append(curation)
                 
                 ## Create a LitGuide object.
-                if task.type == TaskType.HTP_PHENOTYPE_DATA or task.type == TaskType.REVIEWS:
+                if task.type == TaskType.HTP_PHENOTYPE_DATA or task.type == TaskType.OTHER_HTP_DATA or task.type == TaskType.REVIEWS:
                     lit_guide = LitGuide.as_unique(session, topic=task.topic, reference_id=reference.id)
                     reference.litGuides.append(lit_guide)
         return True
@@ -162,6 +162,10 @@ class NoTasksException(FormNotValidException):
 class ReviewCheckedWithoutGenesException(FormNotValidException):
     def __init__(self):
         super(FormNotValidException, self).__init__("If Review is checked with no genes, you cannot check other gene-specific topics.")
+        
+class GenesWithMultipleTopicsException(FormNotValidException):
+    def __init__(self, genes):
+        super(FormNotValidException, self).__init__("You are trying to assign the following genes to multiple topics: " + str(genes))
      
 def check_form_validity_and_convert_to_tasks(data):
     tasks = []
@@ -197,6 +201,19 @@ def check_form_validity_and_convert_to_tasks(data):
     #Must have at least one task.
     if len(tasks) == 0:
         raise NoTasksException()
+    
+    #Each gene should be associated with only one topics.
+    gene_topic = {}
+    genes_with_multiple_topics = []
+    for task in tasks:
+        for gene in task.gene_names:
+            if gene in gene_topic and gene_topic[gene] != task.topic:
+                genes_with_multiple_topics.append(gene)
+            gene_topic[gene] = task.topic
+            
+    if len(genes_with_multiple_topics) > 0:
+        raise GenesWithMultipleTopicsException(genes_with_multiple_topics)
+                  
     
     #If Review is checked without genes, the gene specific tasks should not be checked.
     gene_specific_checked = False

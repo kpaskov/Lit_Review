@@ -61,7 +61,8 @@ def reference():
         
     return render_template('literature_review.html',
                            ref_list=refs,
-                           ref_count=num_of_refs)     
+                           ref_count=num_of_refs, 
+                           user=current_user.name)     
     
 @app.route("/reference/remove_multiple/<pmids>", methods=['GET', 'POST'])
 @login_required
@@ -128,6 +129,7 @@ def discard_ref(pmid):
 @app.route("/reference/link/<pmid>", methods=['GET', 'POST'])
 @login_required 
 def link_ref(pmid):
+    print "LINK" + pmid 
     response = ""
     try:
         check_for_other_users(current_user.name)
@@ -139,7 +141,7 @@ def link_ref(pmid):
         summary = model.execute(get_ref_summary(pmid), current_user.name)  
         response = "Reference for pmid = " + pmid + " has been added into the database and associated with the following data:<br>" + str(summary)
     
-    except Exception as e:
+    except Exception as e: 
         print 'LINK ' + pmid + e.message  
         response = "Error: " + e.message;
 

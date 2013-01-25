@@ -44,7 +44,7 @@ function link_paper(pmid) {
 			document.getElementById(pmid + "_validation_error").style.display = 'block';		
 		}
 		else {
-			$("#" + pmid).empty().append("<div class='alert alert-success'><h4>Success!</h4>" + data + "</div>");
+			$("#" + pmid).empty().append("<div class='alert alert-success'><h4>Success!</h4>" + data + "<br></div>");
 		}
 	});
 }
@@ -109,6 +109,7 @@ function extract_genes(pmid) {
 
 
 function validate(pmid) {
+	document.getElementById(pmid + "_validation_error").style.display = 'block';
 	errors = "";
 	
 	//Certain tasks must have genes.
@@ -121,25 +122,6 @@ function validate(pmid) {
 		}
 	}
 	
-	//A gene name can't be used for both Add_to_db and Reviews
-	var addToDBGeneNames = document.getElementById(pmid + "_add_to_db_genes").value.replace(new RegExp(",", "gm"), " ").replace(/\|/g, " ").replace(new RegExp(";", "gm"), " ").replace(new RegExp(":", "gm"), " ").split(" ");
-	var reviewGeneNames = document.getElementById(pmid + "_review_genes").value.replace(new RegExp(",", "gm"), " ").replace(/\|/g, " ").replace(new RegExp(";", "gm"), " ").replace(new RegExp(":", "gm"), " ").split(" ");
-	
-	addToDBGeneNames = addToDBGeneNames.filter(function(n) {
-		return n.length != 0;
-	})
-	reviewGeneNames = reviewGeneNames.filter(function(n) {
-		return n.length != 0;
-	})
-	
-	filtered = addToDBGeneNames.filter(function(n) {
-        return reviewGeneNames.indexOf(n) != -1;
-    });
-	
-	if (filtered.length > 0) {
-		errors = errors + "The following gene name(s) were used for two different literature topics: " + filtered + ".<br>";
-	}
-	
 	//The form must have at least one checkbox checked.
 	var checked = $("input[@type=checkbox]:checked"); //find all checked checkboxes + radio buttons  
 	var nbChecked = checked.size();
@@ -147,21 +129,11 @@ function validate(pmid) {
 	if (nbChecked == 0) {
 		errors = errors + "You have to check something before pressing the 'Link...' button.<br>";
 	}
-	
-	//If Review is checked without genes, the gene specific tasks should not be checked.
-	if (document.getElementById(pmid + "_review_cb").checked && reviewGeneNames.length == 0) {
-		for (var i = 0; i < mustHaveGenes.length; i++) {
-			var key = "_" + mustHaveGenes[i];
-			if (document.getElementById(pmid + key).checked) {
-				errors = errors + "If Review is checked with no genes, you cannot check " + mustHaveGenesFull[i] + ".<br>";
-			}
-		}
-	}
 
 	document.getElementById(pmid + "_validation_error").innerHTML = errors
 	if (errors == "") {
 		document.getElementById(pmid + "_validation_error").style.display = 'none';
-		link_paper(pmid);
+		link_paper(pmid); 
 	}
 	else {
 		document.getElementById(pmid + "_validation_error").style.display = 'block';
