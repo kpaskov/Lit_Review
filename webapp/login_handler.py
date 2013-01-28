@@ -25,11 +25,11 @@ class LoginException(Exception):
     
 class NotOnListException(LoginException):
     def __init__(self):
-        super(LoginException, self).__init__('You are not on the list: ' + str(USER_NAMES.keys()) + ' Contact sgd-programmers to add your name to the list.')
+        super(LoginException, self).__init__('You are not on the list: '.join(USER_NAMES.keys()) + '. Contact sgd-programmers to add your name to the list.')
         
 class AnotherUserIsUsingException(LoginException):
     def __init__(self, other_user, last_alive):
-        super(LoginException, self).__init__('Sorry, ' + other_user + ' is already using this interface. This user was last active at ' + last_alive.strftime("%I:%M%p"))
+        super(LoginException, self).__init__('Sorry, ' + other_user + ' is already using this interface. This user was last active at ' + last_alive.strftime("%I:%M%p") + '.')
         
 class BadUsernamePasswordException(LoginException):
     def __init__(self):

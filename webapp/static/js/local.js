@@ -32,6 +32,118 @@ function discard_paper(pmid) {
 
 }
 
+function add_curation_table(root, curations) {
+	var div = document.createElement('div');
+	div.style.display = "inline-block";
+	div.style.verticalAlign = "top";
+	div.style.width = "40%";
+	div.style.margin="0 50px 0 0";
+
+	
+	var tab=document.createElement('table');
+	tab.className="table table-condensed";
+				
+	var tbo=document.createElement('tbody');
+	
+	//Add title to the table
+	var caption = document.createElement('caption');
+	caption.appendChild(document.createTextNode('Ref Curations'));
+	tab.appendChild(caption);
+	
+			
+	//Add headers to the table
+	header1=document.createElement('th');
+	header1.appendChild(document.createTextNode('Task'));
+	tbo.appendChild(header1);
+			
+	header2=document.createElement('th');
+	header2.appendChild(document.createTextNode('Gene Name'));
+	tbo.appendChild(header2);
+			
+	header3=document.createElement('th');
+	header3.appendChild(document.createTextNode('Comment'));
+	tbo.appendChild(header3);
+			
+	var row, cell;
+			
+	//Add data to the table
+	for(var i=0;i<curations.length;i++){
+		curation = curations[i];
+		row=document.createElement('tr');
+				
+		cell1=document.createElement('td');
+		cell1.appendChild(document.createTextNode(curation['task']));
+		row.appendChild(cell1);
+				
+		cell2=document.createElement('td');
+		cell2.appendChild(document.createTextNode(curation['feature']));
+		row.appendChild(cell2);
+				
+		cell3=document.createElement('td');
+		cell3.appendChild(document.createTextNode(curation['comment']));
+		row.appendChild(cell3);
+				
+		tbo.appendChild(row);
+	}
+	tab.appendChild(tbo);
+
+			
+	div.appendChild(tab);
+	root.appendChild(div);
+}
+
+function add_litguide_table(root, litguides) {
+	var div = document.createElement('div');
+	div.style.display = "inline-block";
+	div.style.verticalAlign = "top";
+	div.style.width = "40%";
+	div.style.margin="0 50px 0 0";
+
+	
+	var tab=document.createElement('table');
+	tab.className="table table-condensed";
+				
+	var tbo=document.createElement('tbody');
+	
+	//Add title to the table
+	var caption = document.createElement('caption');
+	caption.appendChild(document.createTextNode('Lit Guides'));
+	tab.appendChild(caption);
+	
+			
+	//Add headers to the table
+	header1=document.createElement('th');
+	header1.appendChild(document.createTextNode('Topic'));
+	tbo.appendChild(header1);
+			
+	header2=document.createElement('th');
+	header2.appendChild(document.createTextNode('Gene Names'));
+	tbo.appendChild(header2);
+			
+	var row, cell;
+			
+	//Add data to the table
+	for(var i=0;i<litguides.length;i++){
+		litguide = litguides[i];
+		row=document.createElement('tr');
+				
+		cell1=document.createElement('td');
+		cell1.appendChild(document.createTextNode(litguide['topic']));
+		row.appendChild(cell1);
+				
+		cell2=document.createElement('td');
+		cell2.appendChild(document.createTextNode(litguide['features']));
+		row.appendChild(cell2);
+				
+		tbo.appendChild(row);
+	}
+	tab.appendChild(tbo);
+
+			
+	div.appendChild(tab);
+	root.appendChild(div);
+}
+
 function link_paper(pmid) {
 	var url = "/reference/link/" + pmid;
 	var form = $("#"+pmid + "_form");
@@ -44,7 +156,23 @@ function link_paper(pmid) {
 			document.getElementById(pmid + "_validation_error").style.display = 'block';		
 		}
 		else {
-			$("#" + pmid).empty().append("<div class='alert alert-success'><h4>Success!</h4>" + data + "<br></div>");
+			obj = JSON && JSON.parse(data) || $.parseJSON(data);
+			
+			$("#" + pmid).empty().append("<h4>Success!</h4>" + obj["message"] + "<br><br>");
+			
+			var root=document.getElementById(pmid);
+			root.className = 'alert alert-success';
+			
+			var curations = obj["curations"];
+			add_curation_table(root, curations);
+			
+			
+			var litguides = obj["litguides"]
+			add_litguide_table(root, litguides);
+			
+			$("#" + pmid + "_added").append("<br><br>")
+
+
 		}
 	});
 }
@@ -79,14 +207,38 @@ function discard_checked_pmids() {
   	if (checkboxesChecked.length>0) {
   		returnStr = '';
   		//concatenate pubmed_ids
+  		var pmidsForURL = '';
+  		var pmids = '';
   		for (var i=0; i<checkboxesChecked.length; i++) {
-  			discard_paper(checkboxesChecked[i].value)
+  			pmidsForURL = pmidsForURL + checkboxesChecked[i].value + "_";
+  			  pmids = pmids + checkboxesChecked[i].value + ", ";
   		}
+  		
+  		var url = "/reference/remove_multiple/" + pmidsForURL;
+		$.post(url, function(data) {
+			input = "Error:"
+			if(data.substring(0, input.length) === input) {
+				document.getElementById("discard_many").className = 'alert alert-error';
+				document.getElementById("discard_many").innerHTML = data;
+  				document.getElementById("discard_many").style.display = 'block'; 
+			}
+			else {
+				document.getElementById("discard_many").className = 'alert alert-success';
+				document.getElementById("discard_many").innerHTML = "The following references have been removed successfully. Pmids = " + pmids;
+  				document.getElementById("discard_many").style.display = 'block'; 
+  				
+  				for (var i=0; i<checkboxesChecked.length; i++) {
+  					pmid = checkboxesChecked[i].value;
+  					$("#" + pmid).empty().append("<div class='alert alert-success'><h4>Success!</h4>Reference for pmid=" + pmid + " has been removed from the database.</div>");
+
+  				}
+			}
+		});
   	}
 	else {
-  		document.getElementById("validation_error").innerHTML = "You haven't selected any references.";
-  		document.getElementById("validation_error").style.display = 'block'; 
-  }
+  		document.getElementById("discard_many").innerHTML = "You haven't selected any references.";
+  		document.getElementById("discard_many").style.display = 'block'; 
+  	}
 }
 
 function extract_genes(pmid) {  	
@@ -112,21 +264,13 @@ function validate(pmid) {
 	errors = "";
 	
 	//Certain tasks must have genes.
-	var mustHaveGenes = ["go", "phenotype", "headline", "primary"];
-	var mustHaveGenesFull = ["GO information", "Classical phenotype information", "Headline information", "Other Primary Information"];
+	var mustHaveGenes = ["go", "phenotype", "headline", "primary", "additional"];
+	var mustHaveGenesFull = ["GO information", "Classical phenotype information", "Headline information", "Other Primary Information", "Additional Literature"];
 	for (var i = 0; i < mustHaveGenes.length; i++) {
 		var key = "_" + mustHaveGenes[i];
 		if (document.getElementById(pmid + key + '_cb').checked && document.getElementById(pmid + key + "_genes").value == "") {
 			errors = errors + "Please enter gene names for " + mustHaveGenesFull[i] + ".<br>";
 		}
-	}
-	
-	//The form must have at least one checkbox checked.
-	var checked = $("input[@type=checkbox]:checked"); //find all checked checkboxes + radio buttons  
-	var nbChecked = checked.size();
-	
-	if (nbChecked == 0) {
-		errors = errors + "You have to check something before pressing the 'Link...' button.<br>";
 	}
 
 	document.getElementById(pmid + "_validation_error").innerHTML = errors

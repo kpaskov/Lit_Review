@@ -17,6 +17,10 @@
     </div>
 {% endfor %}
 
+<!-- Prints general success messages from javascript -->
+<div id="discard_many" class="alert alert-success" style="display:none;"></div>
+
+
 <!-- Prints error flashed messages from Flask -->
 {% for message in get_flashed_messages(category_filter=["error"]) %}
     <div class="alert alert-error">

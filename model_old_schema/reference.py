@@ -94,7 +94,8 @@ class Reference(Base, EqualityByIDMixin, UniqueMixin):
         self.journal = Journal.as_unique(session, abbreviation=pubmed.journal_abbrev)
         
         #Add the abstract.
-        self.abst = Abstract.as_unique(session, reference_id = self.id, text = pubmed.abstract_txt)
+        if pubmed.abstract_txt is not None and not pubmed.abstract_txt == "": 
+            self.abst = Abstract.as_unique(session, reference_id = self.id, text = pubmed.abstract_txt)
                 
         #Add the authors.
         order = 0

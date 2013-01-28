@@ -58,7 +58,6 @@ class Model(object):
                 session.commit()
             return response
         except Exception as e:
-            print "MODEL" + e.message 
             session.rollback()
             raise e
         finally:

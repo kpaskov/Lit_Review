@@ -15,6 +15,7 @@ from queries.associate import link_paper, get_ref_summary, \
 from queries.misc import get_reftemps, get_recent_history, \
     find_genes_in_abstract
 from queries.move_ref import move_reftemp_to_refbad, MoveRefException
+from sqlalchemy.exc import UnboundExecutionError
 from webapp.config import SECRET_KEY, HOST, PORT
 from webapp.forms import LoginForm
 from webapp.login_handler import confirm_login_lit_review_user, \
@@ -25,6 +26,7 @@ app = Flask(__name__)
 model = Model()
 setup_app(app)
 app.debug = True
+
 
 @app.route("/")
 def index():
@@ -38,7 +40,8 @@ def index():
         for k, v in sorted_history:
             labels.append(k.strftime("%m/%d"))
             data.append([v.refbad_count, v.ref_count])
-              
+    except UnboundExecutionError as e:
+        flash('Database connection closed.', 'login')          
     except Exception as e:
         flash(str(e), 'error')
 
@@ -55,7 +58,8 @@ def reference():
         refs = model.execute(get_reftemps(), current_user.name)  
         
         num_of_refs = len(refs) 
-    
+    except UnboundExecutionError as e:
+        flash('Database connection closed.', 'login') 
     except Exception as e:
         flash(str(e), 'error')
         
@@ -80,7 +84,8 @@ def remove_multiple(pmids):
             
             #Reference deleted
             flash("References for pmids= " + str(to_be_removed) + " have been removed from the database.", 'success')
-    
+    except UnboundExecutionError as e:
+        flash('Database connection closed.', 'login') 
     except Exception as e:
         flash(e.message, 'error')
         
@@ -101,6 +106,8 @@ def extract_genes(pmid):
             return str(", ".join(names))
         else:
             return 'No genes found.'
+    except UnboundExecutionError as e:
+        flash('Database connection closed.', 'login') 
     except Exception as e:
         flash(e.message, 'error')
     return 'Test string'
@@ -120,7 +127,8 @@ def discard_ref(pmid):
             
         #Reference deleted
         response = "Reference for pmid=" + pmid + " has been removed from the database."
-    
+    except UnboundExecutionError as e:
+        flash('Database connection closed.', 'login') 
     except Exception as e:
         response = "Error: " + e.message
 
@@ -138,8 +146,9 @@ def link_ref(pmid):
             
         #Link successful
         summary = model.execute(get_ref_summary(pmid), current_user.name)  
-        response = "Reference for pmid = " + pmid + " has been added into the database and associated with the following data:<br>" + str(summary)
-    
+        response = summary
+    except UnboundExecutionError as e:
+        flash('Database connection closed.', 'login') 
     except Exception as e: 
         print 'LINK ' + pmid + e.message  
         response = "Error: " + e.message;
@@ -165,7 +174,8 @@ def login():
             flash("Logged in!", 'login')
             current_user.login()
             return redirect(request.args.get("next") or url_for("index"))
-        
+    except UnboundExecutionError as e:
+        flash('Database connection closed.', 'login')     
     except Exception as e:
         flash(e.message, 'error')
         
@@ -179,7 +189,8 @@ def reauth():
             output = confirm_login_lit_review_user()
             flash(output, 'login')
             return redirect(url_for("index")) 
-        
+    except UnboundExecutionError as e:
+        flash('Database connection closed.', 'login')     
     except Exception as e:
         flash(e.message, 'error')
         
@@ -195,7 +206,8 @@ def logout():
         
         #Logout successful
         flash('Logged out.', 'login')
-        
+    except UnboundExecutionError as e:
+        flash('Database connection closed.', 'login')     
     except Exception as e:
         flash(e.message, 'error')
         

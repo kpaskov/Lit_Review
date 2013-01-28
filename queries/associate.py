@@ -6,10 +6,11 @@ Created on Dec 4, 2012
 from model_old_schema.model import get_first
 from queries.misc import validate_genes
 from queries.move_ref import move_reftemp_to_ref
+import json
 
 class Task():
     def __init__(self, task_type, gene_names, comment):
-        if task_type == TaskType.ADD_TO_DATABASE: self.ref_curation_name = None; self.topic = 'Additional Literature'
+        if task_type == TaskType.ADDITIONAL_LITERATURE: self.ref_curation_name = None; self.topic = 'Additional Literature'
         elif task_type == TaskType.REVIEWS: self.ref_curation_name = None; self.topic = 'Reviews'
         elif task_type == TaskType.HTP_PHENOTYPE_DATA: self.ref_curation_name = 'HTP phenotype'; self.topic = 'Omics'
         elif task_type == TaskType.CLASSICAL_PHENOTYPE_INFORMATION: self.ref_curation_name = 'Classical phenotype information'; self.topic = 'Primary Literature'
@@ -33,7 +34,7 @@ class TaskType:
     CLASSICAL_PHENOTYPE_INFORMATION=5
     HEADLINE_INFORMATION=6
     REVIEWS=7
-    ADD_TO_DATABASE=8
+    ADDITIONAL_LITERATURE=8
     OTHER_PRIMARY_INFORMATION=9
     
 def get_task_type_by_key(task_key):
@@ -45,13 +46,14 @@ def get_task_type_by_key(task_key):
                          'phenotype': TaskType.CLASSICAL_PHENOTYPE_INFORMATION,
                          'headline': TaskType.HEADLINE_INFORMATION,
                          'review': TaskType.REVIEWS,
-                         'add_to_db': TaskType.ADD_TO_DATABASE,
+                         'additional': TaskType.ADDITIONAL_LITERATURE,
                          'primary': TaskType.OTHER_PRIMARY_INFORMATION
                          }[task_key]
         return task_type
     
 def task_type_is_gene_specific(task_type):
-    return task_type == TaskType.GO_INFORMATION or task_type == TaskType.CLASSICAL_PHENOTYPE_INFORMATION or task_type == TaskType.HEADLINE_INFORMATION or task_type == TaskType.OTHER_PRIMARY_INFORMATION
+    gene_specific_tasks = [TaskType.GO_INFORMATION, TaskType.CLASSICAL_PHENOTYPE_INFORMATION, TaskType.HEADLINE_INFORMATION, TaskType.OTHER_PRIMARY_INFORMATION, TaskType.ADDITIONAL_LITERATURE]
+    return task_type in gene_specific_tasks
     
 def associate(pubmed_id, name_to_feature, tasks, session=None):
     """
@@ -88,9 +90,9 @@ def associate(pubmed_id, name_to_feature, tasks, session=None):
                         
             else:   ## no gene name provided
     
-                ## if no gene name provided and "Add to database" or "Reviews" was checked,
+                ## if no gene name provided and "Reviews" was checked,
                 ## no need to add any association
-                if task.type != TaskType.ADD_TO_DATABASE and task.type != TaskType.REVIEWS:
+                if task.type != TaskType.REVIEWS:
                     curation = RefCuration.as_unique(session, task=task.ref_curation_name, reference_id=reference.id, feature_id=None)
                     curation.comment = task.comment
                     reference.curations.append(curation)
@@ -107,13 +109,34 @@ def get_ref_summary(pmid, session=None):
         from model_old_schema.reference import Reference
 
         ref = get_first(Reference, session, pubmed_id=pmid)
-        message = "RefCurations:<br>"
-        for curation in ref.curations:
-            message = message + str(curation) + ", "
-        message = message + "<br>LitGuides:<br>"
-        for lit_guide in ref.litGuides:
-            message = message + str(lit_guide) + ", "       
-        return message 
+        curations = ref.curations
+        curation_summary = []
+        
+        for curation in curations:
+            if curation.feature is None:
+                feature_name = '-'
+            else:
+                feature_name = curation.feature.gene_name
+            if curation.comment is None:
+                comment = '-'
+            else:
+                comment = curation.comment
+            curation_summary.append({'task':curation.task, 'feature':feature_name, 'comment':comment})
+        
+        litguides = ref.litGuides
+        litguide_summary = []
+        for litguide in litguides:
+            feature_names = []
+            for feature in litguide.features:
+                if feature.gene_name is None:
+                    feature_names.append(feature.name)
+                else:
+                    feature_names.append(feature.gene_name)
+            litguide_summary.append({'topic':litguide.topic, 'features': ', '.join(feature_names)})
+            
+        ref_summary = {'curations':curation_summary, 'litguides':litguide_summary, 'message':"Reference for pmid = " + pmid + " has been added into the database and associated with the following data:"}
+      
+        return json.dumps(ref_summary)  
     return f if session is None else f(session)
 
 #Exceptions
@@ -136,7 +159,7 @@ class ReferenceNotMovedException(LinkPaperException):
         
 class AssociateException(LinkPaperException):
     def __init__(self, pmid):
-        super(LinkPaperException, self).__init__("An error occurred when linking the reference for pmid = " + pmid + " to the info you picked/entered.")
+        super(LinkPaperException, self).__init__("An error occurred when linking the reference for pmid = " + pmid + " to the info you entered.")
         self.pmid = pmid
         
 class FormNotValidException(Exception):
@@ -150,26 +173,16 @@ class NoGeneNamesException(FormNotValidException):
         super(FormNotValidException, self).__init__("Please enter gene names for " + task_key)
         self.task_key = task_key
 
-class GeneNameUsedMultipleTimesException(FormNotValidException):
-    def __init__(self, gene_names):
-        super(FormNotValidException, self).__init__('The following gene name(s) were used for two different literature topics: ' + ', '.join(gene_names))
-        self.gene_names = gene_names
-
-class NoTasksException(FormNotValidException):
-    def __init__(self):
-        super(FormNotValidException, self).__init__("From server You have to check something before press the 'Link...' button")
-        
 class ReviewCheckedWithoutGenesException(FormNotValidException):
     def __init__(self):
         super(FormNotValidException, self).__init__("If Review is checked with no genes, you cannot check other gene-specific topics.")
         
 class GenesWithMultipleTopicsException(FormNotValidException):
-    def __init__(self, genes):
-        super(FormNotValidException, self).__init__("You are trying to assign the following genes to multiple topics: " + str(genes))
+    def __init__(self, gene_names):
+        super(FormNotValidException, self).__init__("You are trying to assign the following genes to multiple topics: " + ', '.join(gene_names))
      
 def check_form_validity_and_convert_to_tasks(data):
     tasks = []
-    not_repeated = set()
     for key in data.keys(): 
         if key.endswith('_cb'):
             task_key = key[:-3]
@@ -185,22 +198,11 @@ def check_form_validity_and_convert_to_tasks(data):
                 #Certain tasks must have genes.
                 if task_type_is_gene_specific(task_type) and len(gene_names) == 0:
                     raise NoGeneNamesException(task_key)
-            
-                #A gene name can't be used for both Add_to_db and Reviews.
-                if task_type == TaskType.ADD_TO_DATABASE or task_type == TaskType.REVIEWS:
-                    intersection = not_repeated & set(gene_names)
-                    if len(intersection) > 0:
-                        raise GeneNameUsedMultipleTimesException(intersection) 
-                    not_repeated.update(gene_names) 
             else:
                 gene_names = [] 
                                 
             task = Task(task_type, gene_names, data[comment_key])   
             tasks.append(task)
-            
-    #Must have at least one task.
-    if len(tasks) == 0:
-        raise NoTasksException()
     
     #Each gene should be associated with only one topics.
     gene_topic = {}

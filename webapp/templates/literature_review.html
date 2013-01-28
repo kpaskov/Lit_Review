@@ -128,7 +128,7 @@
 			<textarea id={{pmid~'_primary_comment'}} name={{pmid~'_primary_comment'}} style="width:40%" rows="1"></textarea><br>
 	    </div></ul>
 	    
-	    <input id={{pmid~'_review_cb'}} name={{pmid~'_review_cb'}} onclick="show_hide_comment('{{pmid~'_primary'}}')" type="checkbox"> Review <span class="muted">(Reviews)</span> <br>
+	    <input id={{pmid~'_review_cb'}} name={{pmid~'_review_cb'}} onclick="show_hide_comment('{{pmid~'_review'}}')" type="checkbox"> Review <span class="muted">(Reviews)</span> <br>
 		<ul><div id={{pmid~'_review_block'}} style="display:none;">
 			<label style="float:left">Genes:</label>
 			<textarea id={{pmid~'_review_genes'}} name={{pmid~'_review_genes'}} style="float:left; width:40%" rows="1"></textarea>
@@ -136,19 +136,20 @@
 			<textarea id={{pmid~'_review_comment'}} name={{pmid~'_review_comment'}} style="width:40%" rows="1"></textarea><br>
 	    </div></ul>
 	    
-	    <input id={{pmid~'_add_to_db_cb'}} name={{pmid~'_add_to_db_cb'}} onclick="show_hide_comment('{{pmid~'_add_to_db'}}')" type="checkbox"> Add to Database <span class="muted">(Additional Literature)</span> <br>
-		<ul><div id={{pmid~'_add_to_db_block'}} style="display:none;">
+	    <input id={{pmid~'_additional_cb'}} name={{pmid~'_additional_cb'}} onclick="show_hide_comment('{{pmid~'_additional'}}')" type="checkbox"> Additional Literature <span class="muted">(Additional Literature)</span> <br>
+		<ul><div id={{pmid~'_additional_block'}} style="display:none;">
+			<span style="float:left; color:red">*</span>
 			<label style="float:left">Genes:</label>
-			<textarea id={{pmid~'_add_to_db_genes'}} name={{pmid~'_add_to_db_genes'}} style="float:left; width:40%" rows="1"></textarea>
+			<textarea id={{pmid~'_additional_genes'}} name={{pmid~'_additional_genes'}} style="float:left; width:40%" rows="1"></textarea>
 			<label style="float:left">Comment:</label>
-			<textarea id={{pmid~'_add_to_db_comment'}} name={{pmid~'_add_to_db_comment'}} style="width:40%" rows="1"></textarea><br>
+			<textarea id={{pmid~'_additional_comment'}} name={{pmid~'_additional_comment'}} style="width:40%" rows="1"></textarea><br>
 	    </div></ul>
 	
    
 	  </ul>
 	</form>
 	
-		<input class="btn" type = "submit" onclick="validate({{pmid}})" value="Link checked tags/topics/genes to this paper"\>
+		<input class="btn" type = "submit" onclick="validate({{pmid}})" value="Add to Database"\>
 
 	</div>
 	  </ul></div>  <!-- end of a pubmed section -->

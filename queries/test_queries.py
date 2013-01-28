@@ -124,7 +124,7 @@ class TestAssociate(ModelCreationMixin):
                      Task(TaskType.GO_INFORMATION, ['ACT1'], "Comment"),
                      Task(TaskType.HEADLINE_INFORMATION, ['YAL009W', 'YAL016C-B'], "Comment"),
                      
-                     Task(TaskType.ADD_TO_DATABASE, None, "Comment"),
+                     Task(TaskType.ADDITIONAL_LITERATURE, None, "Comment"),
                      Task(TaskType.REVIEWS, None, "Comment")
                      ]
             
