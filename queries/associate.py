@@ -134,7 +134,9 @@ def get_ref_summary(pmid, session=None):
                     feature_names.append(feature.gene_name)
             litguide_summary.append({'topic':litguide.topic, 'features': ', '.join(feature_names)})
             
-        ref_summary = {'curations':curation_summary, 'litguides':litguide_summary, 'message':"Reference for pmid = " + pmid + " has been added into the database and associated with the following data:"}
+        ref_summary = {'curations':curation_summary, 'litguides':litguide_summary, 'message':"Reference for pmid = " + pmid + " has been added into the database and associated with the following data:",
+                       'curationlink':'http://pastry.stanford.edu/cgi-bin/curation/litGuideCuration?user=' + session.user + '&ref=' + pmid,
+                       'sgdlink':'http://pastry.stanford.edu/cgi-bin/reference/reference.pl?dbid=' + ref.dbxref_id}
       
         return json.dumps(ref_summary)  
     return f if session is None else f(session)

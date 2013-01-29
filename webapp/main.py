@@ -26,7 +26,6 @@ import json
 app = Flask(__name__)
 model = Model()
 setup_app(app)
-app.debug = True
 
 
 @app.route("/")

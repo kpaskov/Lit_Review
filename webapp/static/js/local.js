@@ -158,7 +158,7 @@ function link_paper(pmid) {
 		else {
 			obj = JSON && JSON.parse(data) || $.parseJSON(data);
 			
-			$("#" + pmid).empty().append("<h4>Success!</h4>" + obj["message"] + "<br><br>");
+			$("#" + pmid).empty().append("<h4>Success!</h4>" + obj["message"] + "<br>");
 			
 			var root=document.getElementById(pmid);
 			root.className = 'alert alert-success';
@@ -166,13 +166,13 @@ function link_paper(pmid) {
 			var curations = obj["curations"];
 			add_curation_table(root, curations);
 			
-			
 			var litguides = obj["litguides"]
 			add_litguide_table(root, litguides);
 			
 			$("#" + pmid + "_added").append("<br><br>")
 
-
+			$("#" + pmid).append("<div>See it here: <a href=" + obj['curationlink'] + " target= _blank>Literature Guide Curation</a> "
+			+ " <a href=" + obj['sgdlink'] + " class=popup target= _blank> <img src=http://pastry.stanford.edu/images/PaperIcon3.gif alt='SGD Papers Entry'><br></div>");
 		}
 	});
 }

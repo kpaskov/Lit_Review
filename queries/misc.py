@@ -109,6 +109,11 @@ def find_genes_in_abstract(pubmed_id, session=None):
             if not word in words_tried:
                 fs = get_features_by_alias(word, session)
                 f = get_feature_by_name(word, session)
+                
+                #This may be a gene name with 'p' appended.
+                if word.endswith('P') and f is None and len(fs) == 0:
+                    fs = get_features_by_alias(word[:-1], session)
+                    f = get_feature_by_name(word[:-1], session)
 
                 if len(fs) > 0:
                     if f is not None:
