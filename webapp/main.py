@@ -21,6 +21,7 @@ from webapp.forms import LoginForm
 from webapp.login_handler import confirm_login_lit_review_user, \
     logout_lit_review_user, login_lit_review_user, setup_app, LoginException, \
     LogoutException, check_for_other_users
+import json
 
 app = Flask(__name__)
 model = Model()
@@ -96,21 +97,36 @@ def extract_genes(pmid):
     try:
         check_for_other_users(current_user.name)
         features = model.execute(find_genes_in_abstract(pmid), current_user.name)
-        names = []
-        for feature in features:
-            if feature.gene_name is not None:
-                names.append(feature.gene_name)
+        feature_to_name = features['name']
+        feature_to_alias = features['alias']
+        
+        highlight_red = set()
+        highlight_blue = set()
+        message = ''
+        
+        for key, value in feature_to_name.items():
+            highlight_blue.add(key)
+            if key == value.gene_name: 
+                message = message + key + ', '
             else:
-                names.append(feature.name)
-        if len(names) > 0:
-            return str(", ".join(names))
-        else:
-            return 'No genes found.'
+                message = message + key + '=' + value.gene_name + ', '
+        
+        for key, value in feature_to_alias.items():
+            highlight_red.add(key)
+            possibilities = ', '.join([feature.gene_name for feature in value])
+            message = message + key + '=(' + possibilities + '), '
+            
+        if len(highlight_red) + len(highlight_blue) == 0:
+            message = 'No genes found.'
+            
+        return_value = json.dumps({'message':message, 'highlight_red':list(highlight_red), 'highlight_blue':list(highlight_blue)})
+        print return_value
+        return return_value 
     except UnboundExecutionError as e:
         flash('Database connection closed.', 'login') 
     except Exception as e:
         flash(e.message, 'error')
-    return 'Test string'
+    return 'Error.'
     
     
 

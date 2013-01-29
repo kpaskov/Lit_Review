@@ -245,15 +245,20 @@ function extract_genes(pmid) {
 	$.ajax( {
 		url: "/reference/extract_genes/" + pmid,
 		success: function( data ) {
-			$( "#" + pmid + "_genes_area").html(data);
+			obj = JSON && JSON.parse(data) || $.parseJSON(data);
 			
-			if(data != 'No genes found.') {
-				names = data.split(', ');
-				highlightStartTag = "<font style='color:blue;'>";
-    			highlightEndTag = "</font>";
-				for (var i = 0; i < names.length; i++) {
-					highlightSearchTerms(names[i], document.getElementById(pmid + "_abstract"), false, false, highlightStartTag, highlightEndTag);
-				}
+			highlightBlue = obj['highlight_blue'];
+			highlightRed = obj['highlight_red'];
+			message = obj['message'];
+			
+			$( "#" + pmid + "_genes_area").html(message);
+
+				
+			for (var i = 0; i < highlightBlue.length; i++) {
+				highlightSearchTerms(highlightBlue[i], document.getElementById(pmid + "_abstract"), false, false, "<font style='color:blue;'>", "</font>");
+			}
+			for (var i = 0; i < highlightRed.length; i++) {
+				highlightSearchTerms(highlightRed[i], document.getElementById(pmid + "_abstract"), false, false, "<font style='color:red;'>", "</font>"); 
 			}
 		}
 	});

@@ -7,35 +7,44 @@ from model_old_schema.model import get_first, get
 import datetime
 import string
 
-def is_number(s):
-    try:
-        int(s)
-        return True
-    except ValueError:
-        return False
     
 def get_feature_by_name(name, session=None):
     """
     Get a feature by its name.
+    """     
+    
+    from model_old_schema.feature import Feature
+
+    def f(session):
+        feature = get_first(Feature, session, name=name.upper())
+        if feature is not None and not feature.type == 'chromosome':
+            return feature
+        
+        
+        feature = get_first(Feature, session, gene_name=name.upper())
+        if feature is not None and not feature.type == 'chromosome':
+            return feature
+        
+        return None
+    
+    return f if session is None else f(session)
+
+def get_features_by_alias(name, session=None):
+    """
+    Get a feature by its alias.
     """  
     
     from model_old_schema.feature import Feature
 
     def f(session):
+        all_possible = set()
+
+        features = session.query(Feature).filter(Feature.alias_names.contains(name.upper())).all()
+        all_possible.update(features)
         
-        feature = get_first(Feature, session, name=name.upper())
-        if feature is not None and not feature.type=='chromosome':
-            return feature
-        
-        feature = get_first(Feature, session, gene_name=name.upper())
-        if feature is not None:
-            return feature
-        
-        feature = session.query(Feature).filter(Feature.alias_names.contains(name.upper())).first()
-        if feature is not None:
-            return feature  
-        
-        return None                              
+        all_possible = [feature for feature in all_possible if not feature.type == 'chromosome']
+ 
+        return all_possible
     
     return f if session is None else f(session)
     
@@ -87,21 +96,28 @@ def find_genes_in_abstract(pubmed_id, session=None):
     
     from model_old_schema.reference import RefTemp
 
-    def f(session):
-        word_to_feature = {}
-        features = []
+    def f(session): 
+        words_tried = set()       
+        name_to_feature = {}
+        alias_to_features = {}
         
         r = get_first(RefTemp, pubmed_id=pubmed_id, session=session)
         a = str(r.abstract).lower().translate(string.maketrans("",""), string.punctuation)
-        words = a.split()
+        words = [word.upper() for word in a.split()]
         
         for word in words:
-            if not word in word_to_feature and not is_number(word):
+            if not word in words_tried:
+                fs = get_features_by_alias(word, session)
                 f = get_feature_by_name(word, session)
-                word_to_feature[word] = f
-                if f is not None and not f.type == 'chromosome':
-                    features.append(f)
-        return features
+
+                if len(fs) > 0:
+                    if f is not None:
+                        fs.append(f)
+                    alias_to_features[word] = fs
+                elif f is not None:
+                    name_to_feature[word] = f
+                words_tried.add(word)
+        return {"name":name_to_feature, "alias":alias_to_features}
         
     return f if session is None else f(session)
 
