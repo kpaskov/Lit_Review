@@ -202,8 +202,13 @@ def check_form_validity_and_convert_to_tasks(data):
                     raise NoGeneNamesException(task_key)
             else:
                 gene_names = [] 
+                
+            if comment_key in data:
+                comment = data[comment_key]
+            else:
+                comment = '';
                                 
-            task = Task(task_type, gene_names, data[comment_key])   
+            task = Task(task_type, gene_names, comment)   
             tasks.append(task)
     
     #Each gene should be associated with only one topics.

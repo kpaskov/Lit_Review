@@ -147,23 +147,22 @@ def get_recent_history(session=None):
 
     def f(session):
         min_date = datetime.date.today() - datetime.timedelta(days=10)
-        refs = session.query(Reference).filter_by(created_by = session.user).filter(Reference.date_created >= min_date)
-        refbads = session.query(RefBad).filter_by(created_by = session.user).filter(Reference.date_created >= min_date)
+        refs = session.query(Reference).filter(Reference.date_created >= min_date).filter_by(created_by = session.user)
+        refbads = session.query(RefBad).filter(RefBad.date_created >= min_date).filter_by(created_by = session.user)
         
         history = {}
         today = datetime.date.today()
         for i in range(10):
-            new_date = today - datetime.timedelta(days=i)
+            new_date = today - datetime.timedelta(days=i)  
             history[new_date] = HistoryEntry(new_date)
-        
+
         for ref in refs:
             if ref.date_created in history:
                 history[ref.date_created].inc_ref_count()
-                
+        
         for refbad in refbads:
             if refbad.date_created in history:
                 history[refbad.date_created].inc_refbad_count()
-                
         return history
         
     return f if session is None else f(session)

@@ -25,7 +25,7 @@ class LoginException(Exception):
     
 class NotOnListException(LoginException):
     def __init__(self):
-        super(LoginException, self).__init__('You are not on the list: '.join(USER_NAMES.keys()) + '. Contact sgd-programmers to add your name to the list.')
+        super(LoginException, self).__init__('You are not on the list: ' + USER_NAMES.keys() + '. Contact sgd-programmers to add your name to the list.')
         
 class AnotherUserIsUsingException(LoginException):
     def __init__(self, other_user, last_alive):
@@ -51,7 +51,7 @@ def login_lit_review_user(username, password, model, remember):
     except Exception as e:
         raise LoginException(str(e))
     
-    if not model.is_connected():
+    if not model.is_connected(username):
         raise BadUsernamePasswordException()
     
     if username in USER_NAMES:
