@@ -127,7 +127,7 @@ class Book(Base, EqualityByIDMixin):
     isbn = Column('isbn', String)
     total_pages = Column('total_pages', Integer)
     publisher = Column('publisher', String)
-    publisher_location = Column('publisher_location', Integer)
+    publisher_location = Column('publisher_location', String)
 
     def __repr__(self):
         data = self.title, self.total_pages, self.publisher

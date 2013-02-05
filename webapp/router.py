@@ -30,7 +30,6 @@ def setup_app():
     
 @app.route("/")
 def index():
-    print 'getting index'
     labels = []
     data = []
     try:

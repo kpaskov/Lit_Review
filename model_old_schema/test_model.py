@@ -8,7 +8,7 @@ import unittest
 class ModelCreationMixin(unittest.TestCase):
     def setUp(self):
         self.model = Model(DBTYPE, DBHOST, DBNAME, SCHEMA)
-        self.model.connect(DBUSER, DBPASS)
+        #self.model.connect(DBUSER, DBPASS)
 
 class TestConnection(ModelCreationMixin):
     

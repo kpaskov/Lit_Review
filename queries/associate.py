@@ -241,7 +241,7 @@ def link_paper(pmid, tasks, session=None):
     def f(session):
         all_gene_names = set()
         for task in tasks:
-            all_gene_names.update(task.gene_names)
+            all_gene_names.update([gene_name.upper() for gene_name in task.gene_names])
     
         name_to_feature = validate_genes(all_gene_names, session)
     
