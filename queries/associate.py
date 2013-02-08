@@ -115,6 +115,8 @@ def get_ref_summary(pmid, session=None):
         for curation in curations:
             if curation.feature is None:
                 feature_name = '-'
+            elif curation.feature.gene_name is None:
+                feature_name = curation.feature.name
             else:
                 feature_name = curation.feature.gene_name
             if curation.comment is None:

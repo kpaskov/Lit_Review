@@ -4,6 +4,7 @@ Created on Dec 4, 2012
 @author: kpaskov
 '''
 from model_old_schema.model import get_first, get
+from sqlalchemy.sql.expression import func
 import datetime
 import string
 
@@ -67,13 +68,15 @@ def validate_genes(gene_names, session=None):
     def f(session):
         if gene_names is not None and len(gene_names) > 0:
             upper_gene_names = [x.upper() for x in gene_names]
-            fs = set(session.query(Feature).filter(Feature.name.in_(upper_gene_names)).all())
-            fs.update(session.query(Feature).filter(Feature.gene_name.in_(upper_gene_names)).all())
-                
+            fs = set(session.query(Feature).filter(func.upper(Feature.name).in_(upper_gene_names)).all())
+            fs.update(session.query(Feature).filter(func.upper(Feature.gene_name).in_(upper_gene_names)).all())
+                            
             name_to_feature = {}
             for f in fs:
-                name_to_feature[f.name] = f
-                name_to_feature[f.gene_name] = f
+                if f.name is not None:
+                    name_to_feature[f.name.upper()] = f
+                if f.gene_name is not None:
+                    name_to_feature[f.gene_name.upper()] = f
                 
             extraneous_names = name_to_feature.keys()
             for name in upper_gene_names:
