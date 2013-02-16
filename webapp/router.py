@@ -89,30 +89,22 @@ def remove_multiple(pmids):
 def extract_genes(pmid):
     try:
         check_for_other_users(current_user.name)
-        features = model.execute(find_genes_in_abstract(pmid), current_user.name) 
-        feature_to_name = features['name']
-        feature_to_alias = features['alias']
+        words = model.execute(find_genes_in_abstract(pmid), current_user.name) 
+        feature_name_words = words['features'].keys()
+        alias_name_words = words['aliases'].keys()
         
-        highlight_red = set()
-        highlight_blue = set()
-        message = ''
+        message = 'No genes found.'
+        feature_message = words['feature_message']
+        alias_message = words['alias_message']
         
-        for key, value in feature_to_name.items():
-            highlight_blue.add(key)
-            if key == value.gene_name: 
-                message = message + key + ', '
-            else:
-                message = message + key + '=' + value.gene_name + ', '
-        
-        for key, value in feature_to_alias.items():
-            highlight_red.add(key)
-            possibilities = ', '.join([feature.gene_name for feature in value])
-            message = message + key + '=(' + possibilities + '), '
+        if feature_message != '' and alias_message != '':
+            message = feature_message + ', ' + alias_message
+        elif feature_message != '':
+            message = feature_message
+        elif alias_message != '':
+            message = alias_message
             
-        if len(highlight_red) + len(highlight_blue) == 0:
-            message = 'No genes found.'
-            
-        return_value = json.dumps({'message':message, 'highlight_red':list(highlight_red), 'highlight_blue':list(highlight_blue)})
+        return_value = json.dumps({'message':message, 'highlight_red':list(alias_name_words), 'highlight_blue':list(feature_name_words)})
         return return_value 
     except Exception as e:
         flash(e.message, 'error')
@@ -134,7 +126,7 @@ def discard_ref(pmid):
         #Reference deleted
         response = "Reference for pmid=" + pmid + " has been removed from the database."
     except Exception as e:
-        response = "Error: " + e.message
+        response = "Error:<br>" + e.message
 
     return response
 
@@ -152,7 +144,7 @@ def link_ref(pmid):
         summary = model.execute(get_ref_summary(pmid), current_user.name)  
         response = summary
     except Exception as e: 
-        response = "Error: " + e.message;
+        response = "Error:<br>" + e.message;
 
     return response
 

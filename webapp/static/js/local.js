@@ -254,11 +254,12 @@ function extract_genes(pmid) {
 			$( "#" + pmid + "_genes_area").html(message);
 
 				
-			for (var i = 0; i < highlightBlue.length; i++) {
-				highlightSearchTerms(highlightBlue[i], document.getElementById(pmid + "_abstract"), false, false, "<font style='color:blue;'>", "</font>");
-			}
+
 			for (var i = 0; i < highlightRed.length; i++) {
 				highlightSearchTerms(highlightRed[i], document.getElementById(pmid + "_abstract"), false, false, "<font style='color:red;'>", "</font>"); 
+			}
+			for (var i = 0; i < highlightBlue.length; i++) {
+				highlightSearchTerms(highlightBlue[i], document.getElementById(pmid + "_abstract"), false, false, "<font style='color:blue;'>", "</font>");
 			}
 		}
 	});

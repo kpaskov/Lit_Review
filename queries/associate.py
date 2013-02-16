@@ -152,9 +152,16 @@ class LinkPaperException(Exception):
         return repr(self.message)
     
 class GeneNamesNotFountException(LinkPaperException):
-    def __init__(self, bad_gene_names):
-        super(LinkPaperException, self).__init__('The following gene name(s) were not found: ' + ', '.join(bad_gene_names))
-        self.bad_gene_names = bad_gene_names
+    def __init__(self, alias_message, bad_names_message):
+        if alias_message != '' and bad_names_message != '':
+            message = 'The following gene name(s) are aliases: ' + alias_message + '.<br> The following gene name(s) were not found: ' + bad_names_message + '.'
+        elif alias_message != '':
+            message = 'The following gene name(s) are aliases: ' + alias_message + '.'
+        elif bad_names_message != '':
+            message = 'The following gene name(s) were not found: ' + bad_names_message + '.'
+        else:
+            message = 'For some reason, you have generated a Gene Names Not Found Exception.'
+        super(LinkPaperException, self).__init__(message)
         
 class ReferenceNotMovedException(LinkPaperException):
     def __init__(self, pmid):
@@ -245,12 +252,11 @@ def link_paper(pmid, tasks, session=None):
         for task in tasks:
             all_gene_names.update([gene_name.upper() for gene_name in task.gene_names])
     
-        name_to_feature = validate_genes(all_gene_names, session)
+        genes = validate_genes(all_gene_names, session)
     
-        #If we don't get back as many features as we have gene names, find the bad ones and raise an exception.
-        if len(name_to_feature) < len(all_gene_names):
-            bad_gene_names = set(all_gene_names) - set(name_to_feature.keys())
-            raise GeneNamesNotFountException(bad_gene_names)
+        #If some of the gene names are aliases or are just not gene names, throw an exception.
+        if len(genes['aliases']) > 0 or len(genes['not_genes']):
+            raise GeneNamesNotFountException(genes['alias_message'], genes['not_genes_message'])
     
         #Move reftemp to ref table. Raise an exception if something goes wrong.
         moved = move_reftemp_to_ref(pmid, session)
@@ -258,7 +264,7 @@ def link_paper(pmid, tasks, session=None):
             raise ReferenceNotMovedException(pmid)    
     
         #Associate reference with LitGuide and RefCuration objects. Raise an exception if something goes wrong.
-        associated = associate(pmid, name_to_feature, tasks, session)
+        associated = associate(pmid, genes['features'], tasks, session)
         if not associated:
             raise AssociateException(pmid)
         return True

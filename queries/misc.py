@@ -9,46 +9,6 @@ import datetime
 import string
 
     
-def get_feature_by_name(name, session=None):
-    """
-    Get a feature by its name.
-    """     
-    
-    from model_old_schema.feature import Feature
-
-    def f(session):
-        feature = get_first(Feature, session, name=name.upper())
-        if feature is not None and not feature.type == 'chromosome':
-            return feature
-        
-        
-        feature = get_first(Feature, session, gene_name=name.upper())
-        if feature is not None and not feature.type == 'chromosome':
-            return feature
-        
-        return None
-    
-    return f if session is None else f(session)
-
-def get_features_by_alias(name, session=None):
-    """
-    Get a feature by its alias.
-    """  
-    
-    from model_old_schema.feature import Feature
-
-    def f(session):
-        all_possible = set()
-
-        features = session.query(Feature).filter(Feature.alias_names.contains(name.upper())).all()
-        all_possible.update(features)
-        
-        all_possible = [feature for feature in all_possible if not feature.type == 'chromosome']
- 
-        return all_possible
-    
-    return f if session is None else f(session)
-    
 def get_reftemps(session=None):
     
     from model_old_schema.reference import RefTemp
@@ -63,34 +23,88 @@ def validate_genes(gene_names, session=None):
     Convert a list of gene_names to a mapping between those gene_names and features.
     """            
     
-    from model_old_schema.feature import Feature
+    from model_old_schema.feature import Feature, Alias
 
     def f(session):
         if gene_names is not None and len(gene_names) > 0:
             upper_gene_names = [x.upper() for x in gene_names]
-            fs = set(session.query(Feature).filter(func.upper(Feature.name).in_(upper_gene_names)).all())
-            fs.update(session.query(Feature).filter(func.upper(Feature.gene_name).in_(upper_gene_names)).all())
-                            
+            fs_by_name = set(session.query(Feature).filter(func.upper(Feature.name).in_(upper_gene_names)).filter(Feature.type != 'chromosome').all())
+            fs_by_gene_name = set(session.query(Feature).filter(func.upper(Feature.gene_name).in_(upper_gene_names)).filter(Feature.type != 'chromosome').all())
+            
+            all_names_left = set(upper_gene_names)
+      
+            #Create table mapping name -> Feature        
             name_to_feature = {}
-            for f in fs:
-                if f.name is not None:
-                    name_to_feature[f.name.upper()] = f
-                if f.gene_name is not None:
-                    name_to_feature[f.gene_name.upper()] = f
-                
-            extraneous_names = name_to_feature.keys()
-            for name in upper_gene_names:
-                if name.upper() in extraneous_names:
-                    extraneous_names.remove(name.upper())
+            for f in fs_by_name:
+                name_to_feature[f.name.upper()] = f
+            for f in fs_by_gene_name:
+                name_to_feature[f.gene_name.upper()] = f
+    
+            print name_to_feature
+            all_names_left.difference_update(name_to_feature.keys())
+            
+            
+            aliases = session.query(Alias).filter(func.upper(Alias.name).in_(all_names_left)).all()
+
+            #Create table mapping name -> Alias
+            name_to_alias = {}
+            for a in aliases:
+                features = [f for f in a.features if f.type != 'chromosome']
+                if len(features) > 0:
+                    if a.name in name_to_alias:
+                        name_to_alias[a.name.upper()].update(features)
+                    else:
+                        name_to_alias[a.name.upper()] = set(features)
+                        
+            #This may be a gene name with p appended
+            p_endings = [word[:-1] for word in all_names_left if word.endswith('P')]
+            p_ending_fs_by_name = set(session.query(Feature).filter(func.upper(Feature.name).in_(p_endings)).filter(Feature.type != 'chromosome').all())
+            p_ending_fs_by_gene_name = set(session.query(Feature).filter(func.upper(Feature.gene_name).in_(p_endings)).filter(Feature.type != 'chromosome').all())
+            
+            all_names_left.difference_update(name_to_alias.keys())
+             
+            #Add to Alias table all p-ending gene names
+            for p_ending in p_ending_fs_by_name:
+                word = p_ending.name + 'P'
+                if word in name_to_alias:
+                    name_to_alias[word.upper()].add(p_ending)
+                else:
+                    name_to_alias[word.upper()] = set([p_ending])
                     
-            for name in extraneous_names:
-                del name_to_feature[name]
-                 
-            return name_to_feature
+            for p_ending in p_ending_fs_by_gene_name:
+                word = p_ending.gene_name + 'P'
+                if word in name_to_alias:
+                    name_to_alias[word.upper()].add(p_ending)
+                else:
+                    name_to_alias[word.upper()] = set([p_ending])
+                               
+            print name_to_alias
+
+            alias_message = create_alias_message(name_to_alias)
+            feature_message = create_feature_message(name_to_feature)
+            not_genes_message = create_not_genes_message(all_names_left)
+
+            print alias_message
+            print feature_message
+            print all_names_left
+            
+        
+            return {'features':name_to_feature, 'aliases':name_to_alias, 'not_genes':all_names_left, 'alias_message':alias_message, 'feature_message':feature_message, 'not_genes_message':not_genes_message}
         else:
             return {}
         
     return f if session is None else f(session)
+
+def create_alias_message(name_to_aliases):
+    word_to_feature_list = dict((k, ', '.join([feature.gene_name if feature.gene_name is not None else feature.name for feature in v])) for (k, v) in name_to_aliases.iteritems())
+                             
+    return ', '.join([k + '=(' + v + ')' for (k, v) in word_to_feature_list.iteritems()])
+
+def create_feature_message(name_to_feature):
+    return ', '.join([k for k in name_to_feature.keys()])
+
+def create_not_genes_message(not_genes):
+    return ', '.join(not_genes)
 
 def find_genes_in_abstract(pubmed_id, session=None):
     """
@@ -100,33 +114,12 @@ def find_genes_in_abstract(pubmed_id, session=None):
     from model_old_schema.reference import RefTemp
 
     def f(session): 
-        words_tried = set()       
-        name_to_feature = {}
-        alias_to_features = {}
-        
         r = get_first(RefTemp, pubmed_id=pubmed_id, session=session)
         a = str(r.abstract).lower().translate(string.maketrans("",""), string.punctuation)
         words = [word.upper() for word in a.split()]
         
-        for word in words:
-            if not word in words_tried:
-                fs = get_features_by_alias(word, session)
-                f = get_feature_by_name(word, session)
-                
-                #This may be a gene name with 'p' appended.
-                if word.endswith('P') and f is None and len(fs) == 0:
-                    fs = get_features_by_alias(word[:-1], session)
-                    f = get_feature_by_name(word[:-1], session)
-
-                if len(fs) > 0:
-                    if f is not None:
-                        fs.append(f)
-                    alias_to_features[word] = fs
-                elif f is not None:
-                    name_to_feature[word] = f
-                words_tried.add(word)
-        return {"name":name_to_feature, "alias":alias_to_features}
-        
+        return validate_genes(words, session=session)
+            
     return f if session is None else f(session)
 
 class HistoryEntry():

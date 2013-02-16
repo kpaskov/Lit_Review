@@ -46,7 +46,7 @@ class Feature(Base, EqualityByIDMixin):
     sequences = relationship(Sequence)
 
     aliases = relationship("Alias", 
-                           Table('feat_alias', Base.metadata, autoload=True, schema=SCHEMA, extend_existing=True))
+                           Table('feat_alias', Base.metadata, autoload=True, schema=SCHEMA, extend_existing=True), backref='features')
     alias_names = association_proxy('aliases', 'name')
     
     def __repr__(self):
