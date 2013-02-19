@@ -10,4 +10,4 @@ if __name__ == "__main__":
     from webapp import router
     router.model = Model(DBTYPE, DBHOST, DBNAME, SCHEMA)
     router.app.secret_key = SECRET_KEY
-    router.app.run(host=HOST, port=PORT) 
+    router.app.run(host=HOST, port=PORT, debug=True)  

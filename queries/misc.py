@@ -43,8 +43,10 @@ def validate_genes(gene_names, session=None):
             print name_to_feature
             all_names_left.difference_update(name_to_feature.keys())
             
-            
-            aliases = session.query(Alias).filter(func.upper(Alias.name).in_(all_names_left)).all()
+            if len(all_names_left) > 0:
+                aliases = session.query(Alias).filter(func.upper(Alias.name).in_(all_names_left)).all()
+            else:
+                aliases = []
 
             #Create table mapping name -> Alias
             name_to_alias = {}
@@ -78,20 +80,13 @@ def validate_genes(gene_names, session=None):
                 else:
                     name_to_alias[word.upper()] = set([p_ending])
                                
-            print name_to_alias
-
             alias_message = create_alias_message(name_to_alias)
             feature_message = create_feature_message(name_to_feature)
             not_genes_message = create_not_genes_message(all_names_left)
-
-            print alias_message
-            print feature_message
-            print all_names_left
-            
-        
+               
             return {'features':name_to_feature, 'aliases':name_to_alias, 'not_genes':all_names_left, 'alias_message':alias_message, 'feature_message':feature_message, 'not_genes_message':not_genes_message}
         else:
-            return {}
+            return {'features':{}, 'aliases':{}, 'not_genes':set(), 'alias_message':'', 'feature_message':'', 'not_genes_message':''}
         
     return f if session is None else f(session)
 
