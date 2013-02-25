@@ -17,8 +17,8 @@ class FetchMedline():
     def __init__(self, pmid):
         Entrez.email = 'sgd-programmers@genome.stanford.edu'
         ## pmids is a list (array of pmid)
-        handle = Entrez.efetch(db='pubmed', id=pmid, rettype='medline', retmode='text')
-        self.records = Medline.parse(handle)
+        self.handle = Entrez.efetch(db='pubmed', id=pmid, rettype='medline', retmode='text')
+        self.records = Medline.parse(self.handle)
 
     def get_records(self):
         return self.records
@@ -77,21 +77,19 @@ class Pubmed():
     
     def __get_pub_type(self):
         if self.record.has_key('PT'):
-            pubtype = self.record['PT'][0]
-            if (pubtype == 'JOURNAL ARTICLE'):
-                pubtype = 'Journal Article'  ## need a conf for the mapping
+            pubtype = self.record['PT'][0].title()
             return pubtype
         return ''
 
     def __get_publish_status(self):
         if self.record.has_key('PST'):
-            if self.record['PST'].find('aheadofprint'):
+            if self.record['PST'] == 'aheadofprint':
                 return 'Epub ahead of print'
         return 'Published'
 
     def __get_pdf_status(self):
         if self.record.has_key('PST'):
-            if self.record['PST'].find('aheadofprint'):
+            if self.record['PST'] == 'aheadofprint':
                 return 'NAP'
         return 'N'
 
