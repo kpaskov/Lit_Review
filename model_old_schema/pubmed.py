@@ -67,6 +67,11 @@ class MedlineJournal():
                 if record[0] == 'MedAbbr':
                     self.med_abbr = record[1].strip()
 
+def pubmed_status_to_our_status(pubmed_status):
+    our_status = pubmed_status.title()
+    our_status = our_status.replace("Gov'T", "Gov't")
+    our_status = our_status.replace('Sgd', 'SGD')
+    return our_status
 
 class Pubmed():
 
@@ -75,10 +80,10 @@ class Pubmed():
             return self.record[key]
         return ''
     
-    def __get_pub_type(self):
+    def __get_pub_types(self):
         if self.record.has_key('PT'):
-            pubtype = self.record['PT'][0].title()
-            return pubtype
+            pubtypes = [x for x in self.record['PT']]
+            return pubtypes
         return ''
 
     def __get_publish_status(self):
@@ -142,7 +147,7 @@ class Pubmed():
         self.pages = self.__get_entry('PG')
         self.issue = self.__get_entry('IP')
         self.last_revised = self.__get_entry('LR')
-        self.pub_type = self.__get_pub_type()
+        self.pub_types = self.__get_pub_types()
         self.publish_status = self.__get_publish_status()
         self.pdf_status = self.__get_pdf_status()
         self.citation = self.__get_citation()

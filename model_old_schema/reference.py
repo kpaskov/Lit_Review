@@ -14,6 +14,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.orm.session import Session
 from sqlalchemy.schema import Column, ForeignKey, Table
+from sqlalchemy.sql.expression import func
 from sqlalchemy.types import Integer, String, Date
 import datetime
        
@@ -103,7 +104,8 @@ class Reference(Base, EqualityByIDMixin, UniqueMixin):
             self.authors[order] = Author.as_unique(session, name=author_name)
                 
         #Add the ref_type
-        self.refType = RefType.as_unique(session, name=pubmed.pub_type)
+        for name in pubmed.pub_types:
+            self.refTypes.append(RefType.as_unique(session, name=name))
         
     @classmethod
     def unique_hash(cls, pubmed_id):
@@ -321,11 +323,11 @@ class RefType(Base, EqualityByIDMixin, UniqueMixin):
         
     @classmethod
     def unique_hash(cls, name):
-        return name
+        return name.upper()
 
     @classmethod
     def unique_filter(cls, query, name):
-        return query.filter(RefType.name == name)
+        return query.filter(func.upper(RefType.name) == name.upper())
 
     def __repr__(self):
         data = self.name
