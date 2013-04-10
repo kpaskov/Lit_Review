@@ -56,10 +56,13 @@
 	  	
 
 		<input class="btn" type = "submit" onclick="discard_paper({{pmid}})" value="Discard this paper"\>
-	  
+	  <br>
+	  <br>
 	  <div id={{pmid~"_abstract_genes"}}> 
-	     	Genes: <button class="btn btn-mini" onclick="extract_genes({{pmid}})">Auto-extract from abstract</button> 
-	     	<textarea id={{pmid~"_genes_area"}} rows="1" style="width:100%"></textarea>
+	  		<textarea id={{pmid~"_genes_area"}} rows="1" style="width:100%"></textarea>
+	     	<button class="btn btn-mini" onclick="extract_genes({{pmid}})">Auto-extract genes from abstract</button> 
+	  <br>
+	  <br>
 	     	
 	     	
 	     <!-- Prints client-side form validation errors. -->

@@ -66,13 +66,13 @@ class Reference(Base, EqualityByIDMixin, UniqueMixin):
     litGuides = relationship("LitGuide", cascade='all,delete')
     litGuideTopics = association_proxy('litGuides', 'topic')
     
-    curations = relationship('RefCuration', cascade='all,delete')
+    curations = relationship('RefCuration', cascade='all,delete') 
 
     
     def __init__(self, session, pubmed_id):
         self.pubmed_id = pubmed_id
         self.pdf_status='N'
-        self.source='PubMed script'
+        self.source='Curator Triage'
         self.created_by = session.user
         self.date_created = datetime.datetime.now()
         
@@ -87,6 +87,8 @@ class Reference(Base, EqualityByIDMixin, UniqueMixin):
         self.volume = pubmed.volume
         self.title = pubmed.title
         self.issue = pubmed.issue
+        self.date_published = pubmed.date_published
+        self.date_revised = pubmed.last_revised
                         
         pubmed = get_medline_data(self.pubmed_id)
 

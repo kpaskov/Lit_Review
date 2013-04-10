@@ -40,7 +40,6 @@ def validate_genes(gene_names, session=None):
             for f in fs_by_gene_name:
                 name_to_feature[f.gene_name.upper()] = f
     
-            print name_to_feature
             all_names_left.difference_update(name_to_feature.keys())
             
             if len(all_names_left) > 0:
@@ -60,8 +59,11 @@ def validate_genes(gene_names, session=None):
                         
             #This may be a gene name with p appended
             p_endings = [word[:-1] for word in all_names_left if word.endswith('P')]
-            p_ending_fs_by_name = set(session.query(Feature).filter(func.upper(Feature.name).in_(p_endings)).filter(Feature.type != 'chromosome').all())
-            p_ending_fs_by_gene_name = set(session.query(Feature).filter(func.upper(Feature.gene_name).in_(p_endings)).filter(Feature.type != 'chromosome').all())
+            p_ending_fs_by_name = set()
+            p_ending_fs_by_gene_name = set()
+            if len(p_endings) > 0:
+                p_ending_fs_by_name.update(session.query(Feature).filter(func.upper(Feature.name).in_(p_endings)).filter(Feature.type != 'chromosome').all())
+                p_ending_fs_by_gene_name.update(session.query(Feature).filter(func.upper(Feature.gene_name).in_(p_endings)).filter(Feature.type != 'chromosome').all())
             
             all_names_left.difference_update(name_to_alias.keys())
              
