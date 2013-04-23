@@ -4,6 +4,7 @@ Created on Dec 4, 2012
 @author: kpaskov
 '''
 from model_old_schema.model import get_first
+from webapp.litreview_logger import log_it
 
 class MoveRefException(Exception):
     def __init__(self, message):
@@ -63,12 +64,16 @@ def move_reftemp_to_ref(pubmed_id, session=None):
 
     def f(session):
         reftemp = get_first(RefTemp, session, pubmed_id=pubmed_id)
+        log_it('got_reftemp', 'SUCCESS')
         if reftemp is None:
             raise RefDoesNotExistException(pubmed_id)
-        ref = Reference.as_unique(session, pubmed_id=pubmed_id)
+        ref = Reference(session, pubmed_id=pubmed_id)
+        log_it('created reference', 'SUCCESS')
             
         session.add(ref)
         session.delete(reftemp)
+        log_it('adjusted session', 'SUCCESS')
+
         return True
   
     return f if session is None else f(session)

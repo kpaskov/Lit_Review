@@ -6,6 +6,7 @@ Created on Dec 4, 2012
 from model_old_schema.model import get_first
 from queries.misc import validate_genes
 from queries.move_ref import move_reftemp_to_ref
+from webapp.litreview_logger import log_it
 import json
 
 class Task():
@@ -24,6 +25,9 @@ class Task():
         self.type = task_type
         self.gene_names = gene_names
         self.comment = comment 
+        
+    def __repr__(self):
+        return 'Type: ' + self.topic + ' Genes: ' + str(self.gene_names) + ' Comment: ' + self.comment
         
 class TaskType:
     HIGH_PRIORITY=0
@@ -161,16 +165,16 @@ class GeneNamesNotFountException(LinkPaperException):
             message = 'The following gene name(s) were not found: ' + bad_names_message + '.'
         else:
             message = 'For some reason, you have generated a Gene Names Not Found Exception.'
-        super(LinkPaperException, self).__init__(message)
+        LinkPaperException.__init__(self, message)
         
 class ReferenceNotMovedException(LinkPaperException):
     def __init__(self, pmid):
-        super(LinkPaperException, self).__init__("Problem moving temporary reference for pmid = " + pmid + " to the reference table.")
+        LinkPaperException.__init__(self, "Problem moving temporary reference for pmid = " + pmid + " to the reference table.")
         self.pmid = pmid
         
 class AssociateException(LinkPaperException):
     def __init__(self, pmid):
-        super(LinkPaperException, self).__init__("An error occurred when linking the reference for pmid = " + pmid + " to the info you entered.")
+        LinkPaperException.__init__(self, "An error occurred when linking the reference for pmid = " + pmid + " to the info you entered.")
         self.pmid = pmid
         
 class FormNotValidException(Exception):
@@ -181,16 +185,16 @@ class FormNotValidException(Exception):
     
 class NoGeneNamesException(FormNotValidException):
     def __init__(self, task_key):
-        super(FormNotValidException, self).__init__("Please enter gene names for " + task_key)
+        FormNotValidException.__init__(self, "Please enter gene names for " + task_key)
         self.task_key = task_key
 
 class ReviewCheckedWithoutGenesException(FormNotValidException):
     def __init__(self):
-        super(FormNotValidException, self).__init__("If Review is checked with no genes, you cannot check other gene-specific topics.")
+        FormNotValidException.__init__(self, "If Review is checked with no genes, you cannot check other gene-specific topics.")
         
 class GenesWithMultipleTopicsException(FormNotValidException):
     def __init__(self, gene_names):
-        super(FormNotValidException, self).__init__("You are trying to assign the following genes to multiple topics: " + ', '.join(gene_names))
+        FormNotValidException.__init__(self, "You are trying to assign the following genes to multiple topics: " + ', '.join(gene_names))
      
 def check_form_validity_and_convert_to_tasks(data):
     tasks = []
@@ -219,6 +223,8 @@ def check_form_validity_and_convert_to_tasks(data):
                                 
             task = Task(task_type, gene_names, comment)   
             tasks.append(task)
+            
+    log_it('Basic', 'SUCCESS')
     
     #Each gene should be associated with only one topics.
     gene_topic = {}
@@ -231,6 +237,7 @@ def check_form_validity_and_convert_to_tasks(data):
             
     if len(genes_with_multiple_topics) > 0:
         raise GenesWithMultipleTopicsException(genes_with_multiple_topics)
+    log_it('Only one topic', 'SUCCESS')
                   
     
     #If Review is checked without genes, the gene specific tasks should not be checked.
@@ -243,31 +250,38 @@ def check_form_validity_and_convert_to_tasks(data):
             gene_specific_checked = True
     if review_checked_without_genes and gene_specific_checked:
         raise ReviewCheckedWithoutGenesException()
+    log_it('Review check', 'SUCCESS')
     
     return tasks
 
 def link_paper(pmid, tasks, session=None):
     def f(session):
+        log_it('validate_genes', 'BEGIN')
         all_gene_names = set()
         for task in tasks:
             all_gene_names.update([gene_name.upper() for gene_name in task.gene_names])
     
         genes = validate_genes(all_gene_names, session)
+        log_it('validate_genes', 'SUCCESS')
     
+        log_it('move_reftemp_to_ref', 'BEGIN')
         #If some of the gene names are aliases or are just not gene names, throw an exception.
-        if len(genes['aliases']) > 0 or len(genes['not_genes']):
+        if len(genes['aliases']) > 0 or len(genes['not_genes']) > 0:
             raise GeneNamesNotFountException(genes['alias_message'], genes['not_genes_message'])
     
         #Move reftemp to ref table. Raise an exception if something goes wrong.
         moved = move_reftemp_to_ref(pmid, session)
         if not moved:
             raise ReferenceNotMovedException(pmid)    
-    
+        log_it('move_reftemp_to_ref', 'SUCCESS')
+
+        log_it('associate', 'BEGIN')
         #Associate reference with LitGuide and RefCuration objects. Raise an exception if something goes wrong.
         associated = associate(pmid, genes['features'], tasks, session)
         if not associated:
             raise AssociateException(pmid)
         return True
+        log_it('associate', 'SUCCESS')
     
     return f if session is None else f(session)
 

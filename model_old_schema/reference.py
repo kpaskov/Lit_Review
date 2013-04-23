@@ -16,6 +16,7 @@ from sqlalchemy.orm.session import Session
 from sqlalchemy.schema import Column, ForeignKey, Table
 from sqlalchemy.sql.expression import func
 from sqlalchemy.types import Integer, String, Date
+from webapp.litreview_logger import log_it
 import datetime
        
 class Reference(Base, EqualityByIDMixin, UniqueMixin):
@@ -77,6 +78,7 @@ class Reference(Base, EqualityByIDMixin, UniqueMixin):
         self.date_created = datetime.datetime.now()
         
         pubmed = get_medline_data(pubmed_id)
+        log_it('Got medline data', 'SUCCESS')
             
         #Set basic information for the reference.
         self.status = pubmed.publish_status
@@ -89,25 +91,28 @@ class Reference(Base, EqualityByIDMixin, UniqueMixin):
         self.issue = pubmed.issue
         self.date_published = pubmed.date_published
         self.date_revised = pubmed.last_revised
+        log_it('Basic info', 'SUCCESS')
                         
-        pubmed = get_medline_data(self.pubmed_id)
-
         #Add the journal.
         self.journal = Journal.as_unique(session, abbreviation=pubmed.journal_abbrev)
+        log_it('Got journal', 'SUCCESS')
         
         #Add the abstract.
         if pubmed.abstract_txt is not None and not pubmed.abstract_txt == "": 
             self.abst = Abstract.as_unique(session, reference_id = self.id, text = pubmed.abstract_txt)
-                
+        log_it('Add abstract', 'SUCCESS')
+               
         #Add the authors.
         order = 0
         for author_name in pubmed.authors:
             order += 1
             self.authors[order] = Author.as_unique(session, name=author_name)
+        log_it('Add authors', 'SUCCESS')
                 
         #Add the ref_type
         for name in pubmed.pub_types:
             self.refTypes.append(RefType.as_unique(session, name=name))
+        log_it('Add reftype', 'SUCCESS')
         
     @classmethod
     def unique_hash(cls, pubmed_id):

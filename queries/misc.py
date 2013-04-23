@@ -5,6 +5,7 @@ Created on Dec 4, 2012
 '''
 from model_old_schema.model import get_first, get
 from sqlalchemy.sql.expression import func
+from webapp.litreview_logger import log_it
 import datetime
 import string
 
@@ -31,6 +32,7 @@ def validate_genes(gene_names, session=None):
             fs_by_name = set(session.query(Feature).filter(func.upper(Feature.name).in_(upper_gene_names)).filter(Feature.type != 'chromosome').all())
             fs_by_gene_name = set(session.query(Feature).filter(func.upper(Feature.gene_name).in_(upper_gene_names)).filter(Feature.type != 'chromosome').all())
             
+            log_it('DB_query', 'SUCCESS')
             all_names_left = set(upper_gene_names)
       
             #Create table mapping name -> Feature        
@@ -46,6 +48,7 @@ def validate_genes(gene_names, session=None):
                 aliases = session.query(Alias).filter(func.upper(Alias.name).in_(all_names_left)).all()
             else:
                 aliases = []
+            log_it('Create table mapping feature', 'SUCCESS')
 
             #Create table mapping name -> Alias
             name_to_alias = {}
@@ -56,6 +59,7 @@ def validate_genes(gene_names, session=None):
                         name_to_alias[a.name.upper()].update(features)
                     else:
                         name_to_alias[a.name.upper()] = set(features)
+            log_it('Create table mapping alias', 'SUCCESS')
                         
             #This may be a gene name with p appended
             p_endings = [word[:-1] for word in all_names_left if word.endswith('P')]
@@ -66,6 +70,7 @@ def validate_genes(gene_names, session=None):
                 p_ending_fs_by_gene_name.update(session.query(Feature).filter(func.upper(Feature.gene_name).in_(p_endings)).filter(Feature.type != 'chromosome').all())
             
             all_names_left.difference_update(name_to_alias.keys())
+            log_it('p appended', 'SUCCESS')
              
             #Add to Alias table all p-ending gene names
             for p_ending in p_ending_fs_by_name:
@@ -81,10 +86,12 @@ def validate_genes(gene_names, session=None):
                     name_to_alias[word.upper()].add(p_ending)
                 else:
                     name_to_alias[word.upper()] = set([p_ending])
+            log_it('Add to alias table', 'SUCCESS')
                                
             alias_message = create_alias_message(name_to_alias)
             feature_message = create_feature_message(name_to_feature)
             not_genes_message = create_not_genes_message(all_names_left)
+            log_it('Create messages', 'SUCCESS')
                
             return {'features':name_to_feature, 'aliases':name_to_alias, 'not_genes':all_names_left, 'alias_message':alias_message, 'feature_message':feature_message, 'not_genes_message':not_genes_message}
         else:

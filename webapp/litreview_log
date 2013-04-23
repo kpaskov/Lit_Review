@@ -1,0 +1,312 @@
+2013-04-23 10:03:33,017 INFO:  * Running on http://0.0.0.0:5000/
+2013-04-23 10:03:33,017 INFO:  * Restarting with reloader
+2013-04-23 10:04:12,213 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:12] "GET / HTTP/1.1" 200 -
+2013-04-23 10:04:12,325 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:12] "GET /static/css/bootstrap-responsive.css HTTP/1.1" 304 -
+2013-04-23 10:04:12,328 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:12] "GET /static/css/bootstrap.css HTTP/1.1" 304 -
+2013-04-23 10:04:12,355 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:12] "GET /static/js/jquery-1.7.2.min.js HTTP/1.1" 304 -
+2013-04-23 10:04:12,358 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:12] "GET /static/js/bootstrap.js HTTP/1.1" 304 -
+2013-04-23 10:04:12,514 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:12] "GET /static/ico/favicon.ico HTTP/1.1" 304 -
+2013-04-23 10:04:13,693 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:13] "GET /reference HTTP/1.1" 302 -
+2013-04-23 10:04:13,739 INFO: login BEGIN Anonymous
+2013-04-23 10:04:13,746 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:13] "GET /login?next=%2Freference HTTP/1.1" 200 -
+2013-04-23 10:04:17,136 INFO: login BEGIN Anonymous
+2013-04-23 10:04:18,746 INFO: login SUCCESS kpaskov
+2013-04-23 10:04:18,747 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:18] "POST /login HTTP/1.1" 302 -
+2013-04-23 10:04:22,792 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:22] "GET / HTTP/1.1" 200 -
+2013-04-23 10:04:28,350 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:28] "GET /reference HTTP/1.1" 200 -
+2013-04-23 10:04:33,353 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:33] "GET /static/img/pubmedrefsml.gif HTTP/1.1" 304 -
+2013-04-23 10:04:33,356 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:33] "GET /static/img/full_text.gif HTTP/1.1" 304 -
+2013-04-23 10:04:34,202 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:34] "GET /static/js/local.js HTTP/1.1" 304 -
+2013-04-23 10:04:35,849 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:35] "GET /static/img/minus.gif HTTP/1.1" 200 -
+2013-04-23 10:04:37,612 INFO: link_ref BEGIN kpaskov 23447536
+2013-04-23 10:04:37,612 DEBUG: check_for_other_users SUCCESS kpaskov
+2013-04-23 10:04:37,612 DEBUG: Basic SUCCESS kpaskov
+2013-04-23 10:04:37,612 DEBUG: Only one topic SUCCESS kpaskov
+2013-04-23 10:04:37,612 DEBUG: Review check SUCCESS kpaskov
+2013-04-23 10:04:37,612 DEBUG: check_form_validity_and_convert_to_tasks SUCCESS kpaskov []
+2013-04-23 10:04:37,623 DEBUG: validate_genes BEGIN kpaskov
+2013-04-23 10:04:37,623 DEBUG: validate_genes SUCCESS kpaskov
+2013-04-23 10:04:37,623 DEBUG: move_reftemp_to_ref BEGIN kpaskov
+2013-04-23 10:04:37,628 DEBUG: got_reftemp SUCCESS kpaskov
+2013-04-23 10:04:38,335 DEBUG: Got medline data SUCCESS kpaskov
+2013-04-23 10:04:38,336 DEBUG: Basic info SUCCESS kpaskov
+2013-04-23 10:04:38,359 DEBUG: Got journal SUCCESS kpaskov
+2013-04-23 10:04:38,362 DEBUG: Add abstract SUCCESS kpaskov
+2013-04-23 10:04:38,407 DEBUG: Add authors SUCCESS kpaskov
+2013-04-23 10:04:38,414 DEBUG: Add reftype SUCCESS kpaskov
+2013-04-23 10:04:38,414 DEBUG: created reference SUCCESS kpaskov
+2013-04-23 10:04:38,415 DEBUG: adjusted session SUCCESS kpaskov
+2013-04-23 10:04:38,415 DEBUG: move_reftemp_to_ref SUCCESS kpaskov
+2013-04-23 10:04:38,415 DEBUG: associate BEGIN kpaskov
+2013-04-23 10:04:38,673 DEBUG: link_paper SUCCESS kpaskov
+2013-04-23 10:04:38,706 INFO: link_ref SUCCESS kpaskov
+2013-04-23 10:04:38,706 INFO: 127.0.0.1 - - [23/Apr/2013 10:04:38] "POST /reference/link/23447536 HTTP/1.1" 200 -
+2013-04-23 10:09:18,192 INFO: link_ref BEGIN kpaskov 23434373
+2013-04-23 10:09:18,192 DEBUG: check_for_other_users SUCCESS kpaskov
+2013-04-23 10:09:18,193 DEBUG: Basic SUCCESS kpaskov
+2013-04-23 10:09:18,193 DEBUG: Only one topic SUCCESS kpaskov
+2013-04-23 10:09:18,193 DEBUG: Review check SUCCESS kpaskov
+2013-04-23 10:09:18,193 DEBUG: check_form_validity_and_convert_to_tasks SUCCESS kpaskov []
+2013-04-23 10:09:18,194 DEBUG: validate_genes BEGIN kpaskov
+2013-04-23 10:09:18,194 DEBUG: validate_genes SUCCESS kpaskov
+2013-04-23 10:09:18,194 DEBUG: move_reftemp_to_ref BEGIN kpaskov
+2013-04-23 10:09:18,200 DEBUG: got_reftemp SUCCESS kpaskov
+2013-04-23 10:09:19,263 DEBUG: Got medline data SUCCESS kpaskov
+2013-04-23 10:09:19,263 DEBUG: Basic info SUCCESS kpaskov
+2013-04-23 10:09:19,283 DEBUG: Got journal SUCCESS kpaskov
+2013-04-23 10:09:19,286 DEBUG: Add abstract SUCCESS kpaskov
+2013-04-23 10:09:19,308 DEBUG: Add authors SUCCESS kpaskov
+2013-04-23 10:09:19,312 DEBUG: Add reftype SUCCESS kpaskov
+2013-04-23 10:09:19,312 DEBUG: created reference SUCCESS kpaskov
+2013-04-23 10:09:19,312 DEBUG: adjusted session SUCCESS kpaskov
+2013-04-23 10:09:19,312 DEBUG: move_reftemp_to_ref SUCCESS kpaskov
+2013-04-23 10:09:19,312 DEBUG: associate BEGIN kpaskov
+2013-04-23 10:09:19,400 DEBUG: link_paper SUCCESS kpaskov
+2013-04-23 10:09:19,427 INFO: link_ref SUCCESS kpaskov
+2013-04-23 10:09:19,428 INFO: 127.0.0.1 - - [23/Apr/2013 10:09:19] "POST /reference/link/23434373 HTTP/1.1" 200 -
+2013-04-23 10:09:34,955 INFO: link_ref BEGIN kpaskov 23443657
+2013-04-23 10:09:34,956 DEBUG: check_for_other_users SUCCESS kpaskov
+2013-04-23 10:09:34,956 DEBUG: Basic SUCCESS kpaskov
+2013-04-23 10:09:34,956 DEBUG: Only one topic SUCCESS kpaskov
+2013-04-23 10:09:34,956 DEBUG: Review check SUCCESS kpaskov
+2013-04-23 10:09:34,956 DEBUG: check_form_validity_and_convert_to_tasks SUCCESS kpaskov []
+2013-04-23 10:09:34,957 DEBUG: validate_genes BEGIN kpaskov
+2013-04-23 10:09:34,958 DEBUG: validate_genes SUCCESS kpaskov
+2013-04-23 10:09:34,958 DEBUG: move_reftemp_to_ref BEGIN kpaskov
+2013-04-23 10:09:34,963 DEBUG: got_reftemp SUCCESS kpaskov
+2013-04-23 10:09:35,391 DEBUG: Got medline data SUCCESS kpaskov
+2013-04-23 10:09:35,391 DEBUG: Basic info SUCCESS kpaskov
+2013-04-23 10:09:35,396 DEBUG: Got journal SUCCESS kpaskov
+2013-04-23 10:09:35,399 DEBUG: Add abstract SUCCESS kpaskov
+2013-04-23 10:09:35,444 DEBUG: Add authors SUCCESS kpaskov
+2013-04-23 10:09:35,448 DEBUG: Add reftype SUCCESS kpaskov
+2013-04-23 10:09:35,448 DEBUG: created reference SUCCESS kpaskov
+2013-04-23 10:09:35,448 DEBUG: adjusted session SUCCESS kpaskov
+2013-04-23 10:09:35,448 DEBUG: move_reftemp_to_ref SUCCESS kpaskov
+2013-04-23 10:09:35,448 DEBUG: associate BEGIN kpaskov
+2013-04-23 10:09:35,535 DEBUG: link_paper SUCCESS kpaskov
+2013-04-23 10:09:35,562 INFO: link_ref SUCCESS kpaskov
+2013-04-23 10:09:35,563 INFO: 127.0.0.1 - - [23/Apr/2013 10:09:35] "POST /reference/link/23443657 HTTP/1.1" 200 -
+2013-04-23 10:11:46,708 INFO:  * Detected change in '/Users/kpaskov/Documents/Aptana Studio 3 Workspace/LitReview/webapp/router.py', reloading
+2013-04-23 10:11:46,759 INFO:  * Restarting with reloader
+2013-04-23 12:02:43,837 INFO:  * Running on http://0.0.0.0:5000/
+2013-04-23 12:02:43,838 INFO:  * Restarting with reloader
+2013-04-23 12:02:44,916 INFO: 127.0.0.1 - - [23/Apr/2013 12:02:44] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:02:45,400 INFO: 127.0.0.1 - - [23/Apr/2013 12:02:45] "GET /static/css/bootstrap.css HTTP/1.1" 304 -
+2013-04-23 12:02:45,407 INFO: 127.0.0.1 - - [23/Apr/2013 12:02:45] "GET /static/css/bootstrap-responsive.css HTTP/1.1" 304 -
+2013-04-23 12:02:45,420 INFO: 127.0.0.1 - - [23/Apr/2013 12:02:45] "GET /static/js/bootstrap.js HTTP/1.1" 304 -
+2013-04-23 12:02:47,341 INFO: logout BEGIN kpaskov
+2013-04-23 12:02:47,342 INFO: logout SUCCESS Anonymous
+2013-04-23 12:02:47,342 INFO: 127.0.0.1 - - [23/Apr/2013 12:02:47] "GET /logout HTTP/1.1" 302 -
+2013-04-23 12:02:47,357 INFO: 127.0.0.1 - - [23/Apr/2013 12:02:47] "GET / HTTP/1.1" 200 -
+2013-04-23 12:02:48,564 INFO: login BEGIN Anonymous
+2013-04-23 12:02:48,573 INFO: 127.0.0.1 - - [23/Apr/2013 12:02:48] "GET /login HTTP/1.1" 200 -
+2013-04-23 12:02:51,809 INFO: login BEGIN Anonymous
+2013-04-23 12:02:53,274 INFO: login SUCCESS kpaskov
+2013-04-23 12:02:53,275 INFO: 127.0.0.1 - - [23/Apr/2013 12:02:53] "POST /login HTTP/1.1" 302 -
+2013-04-23 12:02:54,030 INFO: 127.0.0.1 - - [23/Apr/2013 12:02:54] "GET / HTTP/1.1" 200 -
+2013-04-23 12:02:59,312 INFO: 127.0.0.1 - - [23/Apr/2013 12:02:59] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:03:11,986 INFO: link_ref BEGIN kpaskov 23437238
+2013-04-23 12:03:11,986 DEBUG: check_for_other_users SUCCESS kpaskov
+2013-04-23 12:03:11,987 DEBUG: Basic SUCCESS kpaskov
+2013-04-23 12:03:11,987 DEBUG: Only one topic SUCCESS kpaskov
+2013-04-23 12:03:11,987 DEBUG: Review check SUCCESS kpaskov
+2013-04-23 12:03:11,987 DEBUG: check_form_validity_and_convert_to_tasks SUCCESS kpaskov [Type: Primary Literature Genes: [u'NDC80'] Comment: ]
+2013-04-23 12:03:11,988 DEBUG: validate_genes BEGIN kpaskov
+2013-04-23 12:03:12,028 DEBUG: DB_query SUCCESS kpaskov
+2013-04-23 12:03:12,034 DEBUG: Create table mapping feature SUCCESS kpaskov
+2013-04-23 12:03:12,041 DEBUG: Create table mapping alias SUCCESS kpaskov
+2013-04-23 12:03:12,041 DEBUG: p appended SUCCESS kpaskov
+2013-04-23 12:03:12,041 DEBUG: Add to alias table SUCCESS kpaskov
+2013-04-23 12:03:12,041 DEBUG: Create messages SUCCESS kpaskov
+2013-04-23 12:03:12,041 DEBUG: validate_genes SUCCESS kpaskov
+2013-04-23 12:03:12,041 DEBUG: move_reftemp_to_ref BEGIN kpaskov
+2013-04-23 12:03:12,043 INFO: link_ref FAILURE kpaskov
+2013-04-23 12:03:12,043 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:12] "POST /reference/link/23437238 HTTP/1.1" 200 -
+2013-04-23 12:03:43,987 INFO:  * Detected change in '/Users/kpaskov/Documents/Aptana Studio 3 Workspace/LitReview/webapp/router.py', reloading
+2013-04-23 12:03:44,025 INFO:  * Restarting with reloader
+2013-04-23 12:03:46,265 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:46] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:03:46,504 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:46] "GET /static/css/bootstrap.css HTTP/1.1" 304 -
+2013-04-23 12:03:46,508 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:46] "GET /static/css/bootstrap-responsive.css HTTP/1.1" 304 -
+2013-04-23 12:03:46,514 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:46] "GET /static/js/local.js HTTP/1.1" 304 -
+2013-04-23 12:03:46,525 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:46] "GET /static/js/jquery-1.7.2.min.js HTTP/1.1" 304 -
+2013-04-23 12:03:46,529 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:46] "GET /static/js/bootstrap.js HTTP/1.1" 304 -
+2013-04-23 12:03:49,953 INFO: logout BEGIN kpaskov
+2013-04-23 12:03:49,953 INFO: logout SUCCESS Anonymous
+2013-04-23 12:03:49,954 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:49] "GET /logout HTTP/1.1" 302 -
+2013-04-23 12:03:49,967 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:49] "GET / HTTP/1.1" 200 -
+2013-04-23 12:03:50,955 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:50] "GET /reference HTTP/1.1" 302 -
+2013-04-23 12:03:50,959 INFO: login BEGIN Anonymous
+2013-04-23 12:03:50,967 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:50] "GET /login?next=%2Freference HTTP/1.1" 200 -
+2013-04-23 12:03:54,166 INFO: login BEGIN Anonymous
+2013-04-23 12:03:54,311 INFO: login SUCCESS kpaskov
+2013-04-23 12:03:54,311 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:54] "POST /login HTTP/1.1" 302 -
+2013-04-23 12:03:54,990 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:54] "GET / HTTP/1.1" 200 -
+2013-04-23 12:03:59,840 INFO: 127.0.0.1 - - [23/Apr/2013 12:03:59] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:04:11,679 INFO: link_ref BEGIN kpaskov 23437238
+2013-04-23 12:04:11,679 DEBUG: check_for_other_users SUCCESS kpaskov
+2013-04-23 12:04:11,680 DEBUG: Basic SUCCESS kpaskov
+2013-04-23 12:04:11,680 DEBUG: Only one topic SUCCESS kpaskov
+2013-04-23 12:04:11,680 DEBUG: Review check SUCCESS kpaskov
+2013-04-23 12:04:11,680 DEBUG: check_form_validity_and_convert_to_tasks SUCCESS kpaskov [Type: Primary Literature Genes: [u'NDC80'] Comment: ]
+2013-04-23 12:04:11,681 DEBUG: validate_genes BEGIN kpaskov
+2013-04-23 12:04:11,721 DEBUG: DB_query SUCCESS kpaskov
+2013-04-23 12:04:11,729 DEBUG: Create table mapping feature SUCCESS kpaskov
+2013-04-23 12:04:11,734 DEBUG: Create table mapping alias SUCCESS kpaskov
+2013-04-23 12:04:11,734 DEBUG: p appended SUCCESS kpaskov
+2013-04-23 12:04:11,734 DEBUG: Add to alias table SUCCESS kpaskov
+2013-04-23 12:04:11,734 DEBUG: Create messages SUCCESS kpaskov
+2013-04-23 12:04:11,735 DEBUG: validate_genes SUCCESS kpaskov
+2013-04-23 12:04:11,735 DEBUG: move_reftemp_to_ref BEGIN kpaskov
+2013-04-23 12:04:11,737 INFO: link_ref FAILURE kpaskov
+2013-04-23 12:04:11,737 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:11] "POST /reference/link/23437238 HTTP/1.1" 200 -
+2013-04-23 12:04:26,028 INFO:  * Detected change in '/Users/kpaskov/Documents/Aptana Studio 3 Workspace/LitReview/webapp/router.py', reloading
+2013-04-23 12:04:26,098 INFO:  * Restarting with reloader
+2013-04-23 12:04:45,637 INFO:  * Detected change in '/Users/kpaskov/Documents/Aptana Studio 3 Workspace/LitReview/webapp/router.py', reloading
+2013-04-23 12:04:45,659 INFO:  * Restarting with reloader
+2013-04-23 12:04:49,108 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:49] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:04:49,351 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:49] "GET /static/css/bootstrap.css HTTP/1.1" 304 -
+2013-04-23 12:04:49,355 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:49] "GET /static/css/bootstrap-responsive.css HTTP/1.1" 304 -
+2013-04-23 12:04:49,359 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:49] "GET /static/js/local.js HTTP/1.1" 304 -
+2013-04-23 12:04:49,365 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:49] "GET /static/js/jquery-1.7.2.min.js HTTP/1.1" 304 -
+2013-04-23 12:04:49,369 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:49] "GET /static/js/bootstrap.js HTTP/1.1" 304 -
+2013-04-23 12:04:50,464 INFO: logout BEGIN kpaskov
+2013-04-23 12:04:50,465 INFO: logout SUCCESS Anonymous
+2013-04-23 12:04:50,465 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:50] "GET /logout HTTP/1.1" 302 -
+2013-04-23 12:04:50,477 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:50] "GET / HTTP/1.1" 200 -
+2013-04-23 12:04:50,976 INFO: login BEGIN Anonymous
+2013-04-23 12:04:50,983 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:50] "GET /login HTTP/1.1" 200 -
+2013-04-23 12:04:54,493 INFO: login BEGIN Anonymous
+2013-04-23 12:04:54,634 INFO: login SUCCESS kpaskov
+2013-04-23 12:04:54,635 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:54] "POST /login HTTP/1.1" 302 -
+2013-04-23 12:04:55,440 INFO: 127.0.0.1 - - [23/Apr/2013 12:04:55] "GET / HTTP/1.1" 200 -
+2013-04-23 12:05:00,560 INFO: 127.0.0.1 - - [23/Apr/2013 12:05:00] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:05:13,270 INFO: link_ref BEGIN kpaskov 23437238
+2013-04-23 12:05:13,270 DEBUG: check_for_other_users SUCCESS kpaskov
+2013-04-23 12:05:13,270 DEBUG: Basic SUCCESS kpaskov
+2013-04-23 12:05:13,270 DEBUG: Only one topic SUCCESS kpaskov
+2013-04-23 12:05:13,270 DEBUG: Review check SUCCESS kpaskov
+2013-04-23 12:05:13,271 DEBUG: check_form_validity_and_convert_to_tasks SUCCESS kpaskov [Type: Primary Literature Genes: [u'NDC80'] Comment: ]
+2013-04-23 12:05:13,272 DEBUG: validate_genes BEGIN kpaskov
+2013-04-23 12:05:13,313 DEBUG: DB_query SUCCESS kpaskov
+2013-04-23 12:05:13,321 DEBUG: Create table mapping feature SUCCESS kpaskov
+2013-04-23 12:05:13,325 DEBUG: Create table mapping alias SUCCESS kpaskov
+2013-04-23 12:05:13,325 DEBUG: p appended SUCCESS kpaskov
+2013-04-23 12:05:13,325 DEBUG: Add to alias table SUCCESS kpaskov
+2013-04-23 12:05:13,325 DEBUG: Create messages SUCCESS kpaskov
+2013-04-23 12:05:13,325 DEBUG: validate_genes SUCCESS kpaskov
+2013-04-23 12:05:13,325 DEBUG: move_reftemp_to_ref BEGIN kpaskov
+2013-04-23 12:05:13,327 INFO: link_ref FAILURE kpaskov
+2013-04-23 12:05:13,328 INFO: 127.0.0.1 - - [23/Apr/2013 12:05:13] "POST /reference/link/23437238 HTTP/1.1" 200 -
+2013-04-23 12:05:37,018 INFO:  * Detected change in '/Users/kpaskov/Documents/Aptana Studio 3 Workspace/LitReview/webapp/router.py', reloading
+2013-04-23 12:05:37,103 INFO:  * Restarting with reloader
+2013-04-23 12:06:42,876 INFO:  * Detected change in '/Users/kpaskov/Documents/Aptana Studio 3 Workspace/LitReview/queries/associate.py', reloading
+2013-04-23 12:06:42,899 INFO:  * Restarting with reloader
+2013-04-23 12:06:47,373 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:47] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:06:47,621 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:47] "GET /static/css/bootstrap.css HTTP/1.1" 304 -
+2013-04-23 12:06:47,624 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:47] "GET /static/css/bootstrap-responsive.css HTTP/1.1" 304 -
+2013-04-23 12:06:47,627 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:47] "GET /static/js/local.js HTTP/1.1" 304 -
+2013-04-23 12:06:47,631 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:47] "GET /static/js/jquery-1.7.2.min.js HTTP/1.1" 304 -
+2013-04-23 12:06:47,635 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:47] "GET /static/js/bootstrap.js HTTP/1.1" 304 -
+2013-04-23 12:06:49,346 INFO: logout BEGIN kpaskov
+2013-04-23 12:06:49,346 INFO: logout SUCCESS Anonymous
+2013-04-23 12:06:49,347 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:49] "GET /logout HTTP/1.1" 302 -
+2013-04-23 12:06:49,358 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:49] "GET / HTTP/1.1" 200 -
+2013-04-23 12:06:49,842 INFO: login BEGIN Anonymous
+2013-04-23 12:06:49,851 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:49] "GET /login HTTP/1.1" 200 -
+2013-04-23 12:06:53,181 INFO: login BEGIN Anonymous
+2013-04-23 12:06:53,327 INFO: login SUCCESS kpaskov
+2013-04-23 12:06:53,328 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:53] "POST /login HTTP/1.1" 302 -
+2013-04-23 12:06:54,024 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:54] "GET / HTTP/1.1" 200 -
+2013-04-23 12:06:59,030 INFO: 127.0.0.1 - - [23/Apr/2013 12:06:59] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:07:10,623 INFO: link_ref BEGIN kpaskov 23437238
+2013-04-23 12:07:10,623 DEBUG: check_for_other_users SUCCESS kpaskov
+2013-04-23 12:07:10,623 DEBUG: Basic SUCCESS kpaskov
+2013-04-23 12:07:10,623 DEBUG: Only one topic SUCCESS kpaskov
+2013-04-23 12:07:10,623 DEBUG: Review check SUCCESS kpaskov
+2013-04-23 12:07:10,624 DEBUG: check_form_validity_and_convert_to_tasks SUCCESS kpaskov [Type: Primary Literature Genes: [u'NDC80'] Comment: ]
+2013-04-23 12:07:10,627 DEBUG: validate_genes BEGIN kpaskov
+2013-04-23 12:07:10,675 DEBUG: DB_query SUCCESS kpaskov
+2013-04-23 12:07:10,682 DEBUG: Create table mapping feature SUCCESS kpaskov
+2013-04-23 12:07:10,687 DEBUG: Create table mapping alias SUCCESS kpaskov
+2013-04-23 12:07:10,687 DEBUG: p appended SUCCESS kpaskov
+2013-04-23 12:07:10,687 DEBUG: Add to alias table SUCCESS kpaskov
+2013-04-23 12:07:10,687 DEBUG: Create messages SUCCESS kpaskov
+2013-04-23 12:07:10,687 DEBUG: validate_genes SUCCESS kpaskov
+2013-04-23 12:07:10,687 DEBUG: move_reftemp_to_ref BEGIN kpaskov
+2013-04-23 12:07:10,689 INFO: link_ref FAILURE kpaskov
+2013-04-23 12:07:10,690 INFO: 127.0.0.1 - - [23/Apr/2013 12:07:10] "POST /reference/link/23437238 HTTP/1.1" 200 -
+2013-04-23 12:08:07,138 INFO:  * Detected change in '/Users/kpaskov/Documents/Aptana Studio 3 Workspace/LitReview/webapp/router.py', reloading
+2013-04-23 12:08:07,197 INFO:  * Restarting with reloader
+2013-04-23 12:08:20,696 INFO:  * Detected change in '/Users/kpaskov/Documents/Aptana Studio 3 Workspace/LitReview/webapp/router.py', reloading
+2013-04-23 12:08:20,717 INFO:  * Restarting with reloader
+2013-04-23 12:08:22,953 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:22] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:08:23,194 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:23] "GET /static/css/bootstrap.css HTTP/1.1" 304 -
+2013-04-23 12:08:23,198 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:23] "GET /static/css/bootstrap-responsive.css HTTP/1.1" 304 -
+2013-04-23 12:08:23,203 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:23] "GET /static/js/local.js HTTP/1.1" 304 -
+2013-04-23 12:08:23,210 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:23] "GET /static/js/jquery-1.7.2.min.js HTTP/1.1" 304 -
+2013-04-23 12:08:23,214 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:23] "GET /static/js/bootstrap.js HTTP/1.1" 304 -
+2013-04-23 12:08:25,023 INFO: logout BEGIN kpaskov
+2013-04-23 12:08:25,023 INFO: logout SUCCESS Anonymous
+2013-04-23 12:08:25,024 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:25] "GET /logout HTTP/1.1" 302 -
+2013-04-23 12:08:25,036 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:25] "GET / HTTP/1.1" 200 -
+2013-04-23 12:08:25,518 INFO: login BEGIN Anonymous
+2013-04-23 12:08:25,526 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:25] "GET /login HTTP/1.1" 200 -
+2013-04-23 12:08:29,236 INFO: login BEGIN Anonymous
+2013-04-23 12:08:29,381 INFO: login SUCCESS kpaskov
+2013-04-23 12:08:29,382 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:29] "POST /login HTTP/1.1" 302 -
+2013-04-23 12:08:30,090 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:30] "GET / HTTP/1.1" 200 -
+2013-04-23 12:08:35,034 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:35] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:08:47,482 INFO: link_ref BEGIN kpaskov 23437238
+2013-04-23 12:08:47,482 DEBUG: check_for_other_users SUCCESS kpaskov
+2013-04-23 12:08:47,483 DEBUG: Basic SUCCESS kpaskov
+2013-04-23 12:08:47,483 DEBUG: Only one topic SUCCESS kpaskov
+2013-04-23 12:08:47,483 DEBUG: Review check SUCCESS kpaskov
+2013-04-23 12:08:47,483 DEBUG: check_form_validity_and_convert_to_tasks SUCCESS kpaskov [Type: Primary Literature Genes: [u'NDC80'] Comment: ]
+2013-04-23 12:08:47,484 DEBUG: validate_genes BEGIN kpaskov
+2013-04-23 12:08:47,522 DEBUG: DB_query SUCCESS kpaskov
+2013-04-23 12:08:47,529 DEBUG: Create table mapping feature SUCCESS kpaskov
+2013-04-23 12:08:47,534 DEBUG: Create table mapping alias SUCCESS kpaskov
+2013-04-23 12:08:47,534 DEBUG: p appended SUCCESS kpaskov
+2013-04-23 12:08:47,534 DEBUG: Add to alias table SUCCESS kpaskov
+2013-04-23 12:08:47,535 DEBUG: Create messages SUCCESS kpaskov
+2013-04-23 12:08:47,535 DEBUG: validate_genes SUCCESS kpaskov
+2013-04-23 12:08:47,535 DEBUG: move_reftemp_to_ref BEGIN kpaskov
+2013-04-23 12:08:47,537 INFO: link_ref FAILURE kpaskov
+2013-04-23 12:08:47,537 INFO: 127.0.0.1 - - [23/Apr/2013 12:08:47] "POST /reference/link/23437238 HTTP/1.1" 200 -
+2013-04-23 12:08:57,700 INFO:  * Detected change in '/Users/kpaskov/Documents/Aptana Studio 3 Workspace/LitReview/webapp/router.py', reloading
+2013-04-23 12:08:57,744 INFO:  * Restarting with reloader
+2013-04-23 12:12:21,153 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:21] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:12:21,400 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:21] "GET /static/css/bootstrap.css HTTP/1.1" 304 -
+2013-04-23 12:12:21,402 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:21] "GET /static/css/bootstrap-responsive.css HTTP/1.1" 304 -
+2013-04-23 12:12:21,405 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:21] "GET /static/js/local.js HTTP/1.1" 304 -
+2013-04-23 12:12:21,408 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:21] "GET /static/js/jquery-1.7.2.min.js HTTP/1.1" 304 -
+2013-04-23 12:12:21,413 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:21] "GET /static/js/bootstrap.js HTTP/1.1" 304 -
+2013-04-23 12:12:23,054 INFO: logout BEGIN kpaskov
+2013-04-23 12:12:23,054 INFO: logout SUCCESS Anonymous
+2013-04-23 12:12:23,056 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:23] "GET /logout HTTP/1.1" 302 -
+2013-04-23 12:12:23,067 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:23] "GET / HTTP/1.1" 200 -
+2013-04-23 12:12:23,652 INFO: login BEGIN Anonymous
+2013-04-23 12:12:23,660 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:23] "GET /login HTTP/1.1" 200 -
+2013-04-23 12:12:27,745 INFO: login BEGIN Anonymous
+2013-04-23 12:12:27,914 INFO: login SUCCESS kpaskov
+2013-04-23 12:12:27,915 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:27] "POST /login HTTP/1.1" 302 -
+2013-04-23 12:12:28,634 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:28] "GET / HTTP/1.1" 200 -
+2013-04-23 12:12:34,139 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:34] "GET /reference HTTP/1.1" 200 -
+2013-04-23 12:12:46,453 INFO: link_ref BEGIN kpaskov 23437238
+2013-04-23 12:12:46,453 DEBUG: check_for_other_users SUCCESS kpaskov
+2013-04-23 12:12:46,454 DEBUG: Basic SUCCESS kpaskov
+2013-04-23 12:12:46,454 DEBUG: Only one topic SUCCESS kpaskov
+2013-04-23 12:12:46,454 DEBUG: Review check SUCCESS kpaskov
+2013-04-23 12:12:46,454 DEBUG: check_form_validity_and_convert_to_tasks SUCCESS kpaskov [Type: Primary Literature Genes: [u'NDC80'] Comment: ]
+2013-04-23 12:12:46,455 DEBUG: validate_genes BEGIN kpaskov
+2013-04-23 12:12:46,500 DEBUG: DB_query SUCCESS kpaskov
+2013-04-23 12:12:46,507 DEBUG: Create table mapping feature SUCCESS kpaskov
+2013-04-23 12:12:46,514 DEBUG: Create table mapping alias SUCCESS kpaskov
+2013-04-23 12:12:46,514 DEBUG: p appended SUCCESS kpaskov
+2013-04-23 12:12:46,514 DEBUG: Add to alias table SUCCESS kpaskov
+2013-04-23 12:12:46,514 DEBUG: Create messages SUCCESS kpaskov
+2013-04-23 12:12:46,515 DEBUG: validate_genes SUCCESS kpaskov
+2013-04-23 12:12:46,515 DEBUG: move_reftemp_to_ref BEGIN kpaskov
+2013-04-23 12:12:46,517 INFO: link_ref FAILURE kpaskov
+2013-04-23 12:12:46,517 INFO: 127.0.0.1 - - [23/Apr/2013 12:12:46] "POST /reference/link/23437238 HTTP/1.1" 200 -
