@@ -22,7 +22,6 @@ from webapp.login_handler import confirm_login_lit_review_user, \
     LogoutException, check_for_other_users
 import json
 import logging
-import sys
 
 
 app = Flask(__name__)
@@ -36,7 +35,7 @@ logging.basicConfig(filename='litreview_log',#/www/logs/litreview_log',
 
 def setup_app():
     setup_app(app)
-    
+
 @app.route("/")
 def index():
     labels = []

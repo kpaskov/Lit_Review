@@ -7,8 +7,7 @@ by Matthew Frazier, MIT) for handling the login sessions and everything.
 """
 from flask_login import LoginManager, login_user, logout_user, confirm_login, \
     current_user
-from webapp.config import USER_NAMES, USERS
-from webapp.users import Anonymous
+from webapp.users import Anonymous, USER_NAMES, USERS
 
 login_manager = LoginManager()
 login_manager.anonymous_user = Anonymous
@@ -25,7 +24,7 @@ class LoginException(Exception):
     
 class NotOnListException(LoginException):
     def __init__(self):
-        super(LoginException, self).__init__('You are not on the list: ' + USER_NAMES.keys() + '. Contact sgd-programmers to add your name to the list.')
+        super(LoginException, self).__init__('You are not on the list: ' + str(USER_NAMES.keys()) + '. Contact sgd-programmers to add your name to the list.')
         
 class AnotherUserIsUsingException(LoginException):
     def __init__(self, other_user, last_alive):

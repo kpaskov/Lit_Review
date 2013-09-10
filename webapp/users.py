@@ -5,6 +5,10 @@ Created on Jan 17, 2013
 '''
 from flask_login import UserMixin, AnonymousUser
 import datetime
+
+USERS = None
+USER_NAMES = None
+
 class User(UserMixin):
     def __init__(self, name, user_id, active=True):
         self.name = name
@@ -39,3 +43,14 @@ class Anonymous(AnonymousUser):
     def alive(self):
         pass
 
+def setup_users(usernames):
+    keys = range(0, len(usernames))
+    values = map(lambda (i, username): User(username, i), enumerate(usernames))
+
+    global USERS
+    global USER_NAMES
+    
+    USERS = dict(zip(keys, values))
+    USERS[len(usernames)+1] = User('guest', len(usernames)+1, False)
+
+    USER_NAMES = dict((u.name, u) for u in USERS.itervalues())
