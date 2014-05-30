@@ -103,8 +103,8 @@ class Pubmed():
         author = self.__get_entry('AU')
         num_of_author = len(author)
 
-        if num_of_author == 0:
-            return ''
+        # if num_of_author == 0:
+        #    return ''
 
         citation = ''
 
@@ -112,8 +112,10 @@ class Pubmed():
             citation = author[0] + ', et al.'
         elif num_of_author == 2:
             citation = author[0] +  ' and ' + author[1]
-        else:
+        elif num_of_author == 1:
             citation = author[0]
+        else:
+            citation = ''
             
         citation += ' (' + self.__get_year('DP') + ') '
         citation += self.__get_entry('TI')     
